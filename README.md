@@ -98,3 +98,39 @@ figures/qber_vs_eve_interception.png
 ### Next Step
 
 The next version will use the sifted BB84 key to encrypt and decrypt a message, connecting quantum key distribution to practical secure communication.
+
+## Version 0.4: Message Encryption Using the BB84 Key
+
+This version connects the BB84 key generation simulation to a simple secure communication demo.
+
+After Alice and Bob generate sifted keys through BB84, the system checks the Quantum Bit Error Rate. If the QBER is above the safety threshold, communication is aborted because possible eavesdropping has been detected. If the QBER is acceptable and Alice and Bob's keys match, the generated key is used to encrypt and decrypt a message.
+
+### New Features
+
+- Added message-to-bits conversion
+- Added bits-to-message conversion
+- Added XOR-based educational encryption
+- Added decryption using Bob's BB84-generated key
+- Added QBER threshold decision logic
+- Added automatic communication abort if QBER is too high
+- Added automatic abort if the generated key is too short
+- Added automatic abort if Alice and Bob's keys do not match exactly
+- Added message encryption notebook
+
+### Security Note
+
+This version uses XOR encryption as an educational one-time-pad style demonstration. It is not production cryptography.
+
+This version also does not implement BB84 error correction or privacy amplification. If Alice and Bob's generated keys do not match exactly, communication is aborted. A future version may add simplified error reconciliation and privacy amplification.
+
+### Key Result
+
+The project now demonstrates the full basic flow of quantum-safe communication:
+
+```text
+BB84 key generation
+→ QBER security check
+→ message encryption
+→ message decryption
+→ abort if attack/noise is detected
+```
