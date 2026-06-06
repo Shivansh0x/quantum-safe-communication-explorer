@@ -5,6 +5,7 @@
 - v0.1: Implemented BB84 without eavesdropping
 - v0.2: Added Eve intercept-resend attack simulation
 - v0.3: Added QBER experiment and visualization
+- v0.3.1: Fixed typo in QBER graph label
 
 ## Version 0.1: BB84 Without Eavesdropping
 
