@@ -1,22 +1,32 @@
 # Quantum Safe Communication Explorer
 
-## Version 0.1: BB84 Without Eavesdropping
+## Version 0.2: Eve Intercept-Resend Attack Simulation
 
-This project simulates the BB84 Quantum Key Distribution protocol to explore quantum-safe communication.
+This version adds an eavesdropping model to the BB84 simulation. 
 
-The first vesrsion simulates BB84 without eavesdropping. Alice generates random bits and bases, Bob generates random bases and both of them only keep positions where their bases match. This allowes them to produce a shared key.
+In BB84, Alice sends qubits using randomly chosen bases, while Bob independently chooses his own measurement bases. In this version, an eavesdropper named Eve can intercept a percentage of the transmitted qubits. Even randomly chooses a basis, measures the qubit, and resends her measured result to Bob. 
 
-## Features
+Because Eve does not always choose the correct basis, her measurement can disturb the transmitted state. This disturbance appears as errors in Alice and Bob’s sifted keys.
 
-- Random bit generation
-- Random basis generation using Z and X bases
-- Bob measurement simulation
-- Key sifting
-- QBER calculation
-- BB84 simulation without Eve
+## New Features
+- Added Eve as an intercept-resend attacker
+- Added configurable Eve interception probability
+- Simulated Eve’s random basis choices
+- Simulated Bob’s measurement after Eve resends qubits
+- Calculated QBER after eavesdropping
+- Tested the protocol with different interception probabilities
 
-## Initial Observation:
-When there is no eavesdropper, Alice and Bob generate matching sifted keys and the QBER is 0. 
+## Key Observation
+When Eve intercepts qubits, the Quantum Bit Error Rate increases. For an intercept-resend attack, the expected QBER is approximately:
 
-## Next Step 
-The next version will introduce Eve using an intercept-resend attack and measure how eavesdropping increases the Quantum Bit Error Rate. 
+QBER ≈ Eve interception probability x 25%
+
+For example, if Eve intercepts 25% of the qubits, the expected QBER is roughly:
+
+0.25 x 0.25 = 0.0625
+
+or about 6.25%
+
+## Next Step
+
+The next version will run the simulation across multiple Eve interception probabilities and generate a graph showing how QBER changes as Eve's attack strength increases. 
