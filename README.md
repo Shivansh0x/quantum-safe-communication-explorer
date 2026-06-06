@@ -125,6 +125,8 @@ This version uses XOR encryption as an educational one-time-pad style demonstrat
 
 This version also does not implement BB84 error correction or privacy amplification. If Alice and Bob's generated keys do not match exactly, communication is aborted. A future version may add simplified error reconciliation and privacy amplification.
 
+The simplified reconciliation step removes mismatched key positions using simulation-only access. This is included to demonstrate why BB84 needs error correction. It is not a production error-correction protocol. Real BB84 systems require authenticated public discussion, error correction, and privacy amplification.
+
 ### Key Result
 
 The project now demonstrates the full basic flow of quantum-safe communication:
@@ -155,6 +157,10 @@ Users can now adjust the number of BB84 qubits, Eve's interception probability, 
 - Added ciphertext and decrypted message display
 - Added QBER experiment graph display
 - Added educational security note
+- Added simplified educational key reconciliation
+- Added option to enable or disable reconciliation in the dashboard
+- Added display for raw key length, final key length, and removed mismatched bits
+- Added explanation that real BB84 requires error correction and privacy amplification
 
 ### How to Run the Dashboard
 
