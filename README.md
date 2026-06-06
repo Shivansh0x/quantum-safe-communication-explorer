@@ -7,6 +7,7 @@
 - v0.3: Added QBER experiment and visualization
 - v0.3.1: Fixed typo in QBER graph label
 - v0.4: Implemented Message Encryption using the BB84 key
+- v0.5: Added Streamlit interactive dashboard
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -135,3 +136,43 @@ BB84 key generation
 → message decryption
 → abort if attack/noise is detected
 ```
+
+## Version 0.5: Streamlit Interactive Dashboard
+
+This version adds an interactive Streamlit dashboard for the quantum-safe communication simulation.
+
+Users can now adjust the number of BB84 qubits, Eve's interception probability, the QBER safety threshold, and the message to be transmitted. The dashboard runs the BB84 simulation, checks the QBER, and either encrypts/decrypts the message or aborts communication if the channel appears unsafe.
+
+### New Features
+
+- Added Streamlit dashboard
+- Added interactive message input
+- Added slider for number of BB84 qubits
+- Added slider for Eve interception probability
+- Added slider for QBER safety threshold
+- Added visual status display for successful or aborted communication
+- Added QBER, key length, and message bit metrics
+- Added ciphertext and decrypted message display
+- Added QBER experiment graph display
+- Added educational security note
+
+### How to Run the Dashboard
+
+```bash
+streamlit run app.py
+```
+
+### Key Result
+The project can now be explored interactively. Users can observe how increasing Eve's interception probability increases the likelihood of communication being aborted due to excessive QBER.
+
+### Dashboard Preview
+
+![Dashboard Preview](figures/dashboard_v0_5.png)
+
+### Output Files
+```text
+app.py
+```
+
+### Next Files
+The next version may add a simplified error correction module, a Qiskit-based circuit demonstration, or a polished project report.
