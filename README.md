@@ -181,7 +181,7 @@ The project can now be explored interactively. Users can observe how increasing 
 app.py
 ```
 
-### Next Files
+### Next Step
 The next version may add a simplified error correction module, a Qiskit-based circuit demonstration, or a polished project report.
 
 ## Version 0.6: Qiskit Circuit-Based BB84 Demo
