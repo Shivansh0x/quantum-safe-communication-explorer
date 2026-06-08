@@ -1,4 +1,83 @@
-# Quantum Safe Communication Explorer
+# Quantum-Safe Communication Explorer
+
+Quantum-Safe Communication Explorer is an educational simulation platform for exploring BB84 Quantum Key Distribution, eavesdropping detection, QBER analysis, and message encryption using quantum-generated keys.
+
+The project combines protocol-level simulation, interactive visualization, and Qiskit-based quantum circuit demonstrations to show how quantum information principles can support secure communication.
+
+## Main Features
+
+- BB84 Quantum Key Distribution simulation
+- Eve intercept-resend attack model
+- QBER experiment and visualization
+- Message encryption using BB84-generated keys
+- Simplified educational key reconciliation
+- Streamlit interactive dashboard
+- Qiskit circuit-based BB84 demonstration
+- Research-style documentation
+
+## Project Architecture
+
+User Input
+
+ ↓
+
+Streamlit Dashboard
+
+   ↓
+
+BB84 Simulator
+
+   ↓
+
+Eve Attack Model
+
+   ↓
+
+QBER Calculation
+
+   ↓
+
+Simplified Reconciliation
+
+   ↓
+
+Message Encryption / Decryption
+
+   ↓
+   
+Results + Visualizations
+
+## Dashboard Preview
+
+![Dashboard Preview](figures/dashboard_v0_5.png)
+
+## How to Run
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the dashboard:
+
+```bash
+streamlit run app.py
+```
+
+Run notebooks:
+
+```bash
+jupyter notebook
+```
+
+## Project Status
+
+Current version: v0.7
+
+The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, message encryption, interactive dashboard usage, and Qiskit circuit demonstrations.
+
+This is an educational research-style project and not production cryptographic software.
 
 ## Version History
 
@@ -9,6 +88,7 @@
 - v0.4: Implemented Message Encryption using the BB84 key
 - v0.5: Added Streamlit interactive dashboard
 - v0.6: Added Qiskit circuit-based BB84 demonstration
+- v0.7: Added project report and improved README readability
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -172,10 +252,6 @@ streamlit run app.py
 ### Key Result
 The project can now be explored interactively. Users can observe how increasing Eve's interception probability increases the likelihood of communication being aborted due to excessive QBER.
 
-### Dashboard Preview
-
-![Dashboard Preview](figures/dashboard_v0_5.png)
-
 ### Output Files
 ```text
 app.py
@@ -221,3 +297,25 @@ figures/qiskit_bb84_basis_results.png
 ### Next Step
 
 The next version may add a project report, a Qiskit section to the dashboard, or simplified error correction and privacy amplification.
+
+## Version 0.7: Research Report and Documentation
+
+This version improves the project’s presentation and documentation.
+
+### New Features
+
+- Added research-style project report
+- Added project architecture explanation
+- Added dashboard screenshot
+- Improved README introduction
+- Added clearer project status section
+- Added limitations and future work discussion
+
+### Output Files
+
+- docs/project_report.md
+- figures/dashboard_v0_5.png
+
+### Next Step
+
+The next version may add deployment, simplified error correction, privacy amplification, or a blog series explaining the project.
