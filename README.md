@@ -4,6 +4,12 @@ Quantum-Safe Communication Explorer is an educational simulation platform for ex
 
 The project combines protocol-level simulation, interactive visualization, and Qiskit-based quantum circuit demonstrations to show how quantum information principles can support secure communication.
 
+## Live Demo
+
+Try the interactive dashboard here:
+
+[Launch Quantum-Safe Communication Explorer](https://quantum-safe-communication-explorer.streamlit.app/)
+
 ## Main Features
 
 - BB84 Quantum Key Distribution simulation
@@ -73,11 +79,9 @@ jupyter notebook
 
 ## Project Status
 
-Current version: v0.7
+Current version: v0.8
 
-The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, message encryption, interactive dashboard usage, and Qiskit circuit demonstrations.
-
-This is an educational research-style project and not production cryptographic software.
+The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, message encryption, interactive dashboard usage, Qiskit circuit demonstrations, research-style documentation, and a live deployed dashboard.
 
 ## Version History
 
@@ -89,6 +93,7 @@ This is an educational research-style project and not production cryptographic s
 - v0.5: Added Streamlit interactive dashboard
 - v0.6: Added Qiskit circuit-based BB84 demonstration
 - v0.7: Added project report and improved README readability
+- v0.8: Deployed the Streamlit dashboard and added live demo link
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -319,3 +324,22 @@ This version improves the project’s presentation and documentation.
 ### Next Step
 
 The next version may add deployment, simplified error correction, privacy amplification, or a blog series explaining the project.
+
+## Version 0.8: Deployed Interactive Dashboard
+
+This version deploys the Streamlit dashboard publicly so the project can be explored through a live web app.
+
+### New Features
+
+- Deployed the Streamlit dashboard online
+- Added live demo link to README
+- Tested dashboard behavior in a hosted environment
+- Made the project easier to access
+
+### Key Result
+
+The project is now publicly accessible through a live interactive dashboard. Users can adjust Eve's interception probability, QBER threshold, number of qubits, and message input to observe how BB84-based secure communication behaves under different conditions.
+
+### Next Step
+
+The next version may add simplified error correction, privacy amplification, or a technical blog series explaining the project.
