@@ -3,3 +3,6 @@ matplotlib
 pandas
 jupyter
 streamlit
+qiskit
+qiskit-aer
+pylatexenc

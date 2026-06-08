@@ -8,6 +8,7 @@
 - v0.3.1: Fixed typo in QBER graph label
 - v0.4: Implemented Message Encryption using the BB84 key
 - v0.5: Added Streamlit interactive dashboard
+- v0.6: Added Qiskit circuit-based BB84 demonstration
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -182,3 +183,41 @@ app.py
 
 ### Next Files
 The next version may add a simplified error correction module, a Qiskit-based circuit demonstration, or a polished project report.
+
+## Version 0.6: Qiskit Circuit-Based BB84 Demo
+
+This version adds a Qiskit-based quantum circuit demonstration of the BB84 protocol.
+
+Earlier versions simulated BB84 at the protocol level using the rule that matching bases produce the correct bit and mismatched bases produce a random bit. This version shows how that behavior appears from actual one-qubit quantum circuits.
+
+### New Features
+
+- Added Qiskit-based BB84 circuit construction
+- Added circuit preparation for |0>, |1>, |+>, and |-> states
+- Added Bob's Z-basis and X-basis measurement logic
+- Added repeated circuit simulations using Qiskit Aer
+- Added comparison of same-basis and different-basis measurements
+- Added result table for all BB84 basis cases
+- Added visualization of measurement probabilities
+
+### Key Result
+
+The Qiskit simulation confirms the rule used in the earlier BB84 simulator:
+
+```text
+same basis → Bob recovers Alice's bit
+different basis → Bob gets an approximately random result
+```
+
+This connects the project’s protocol-level BB84 simulation to real quantum circuit behavior.
+
+### Output Files
+
+src/qiskit_bb84.py
+notebooks/05_qiskit_bb84_demo.ipynb
+results/qiskit_bb84_basis_results.csv
+figures/qiskit_bb84_basis_results.png
+
+### Next Step
+
+The next version may add a project report, a Qiskit section to the dashboard, or simplified error correction and privacy amplification.

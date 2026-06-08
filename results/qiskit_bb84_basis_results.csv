@@ -1,0 +1,9 @@
+alice_bit,alice_basis,bob_basis,shots,count_0,count_1,prob_0,prob_1,same_basis
+0,Z,Z,1000,1000,0,1.0,0.0,True
+0,Z,X,1000,478,522,0.478,0.522,False
+0,X,Z,1000,455,545,0.455,0.545,False
+0,X,X,1000,1000,0,1.0,0.0,True
+1,Z,Z,1000,0,1000,0.0,1.0,True
+1,Z,X,1000,506,494,0.506,0.494,False
+1,X,Z,1000,501,499,0.501,0.499,False
+1,X,X,1000,0,1000,0.0,1.0,True

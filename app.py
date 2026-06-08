@@ -206,6 +206,20 @@ else:
         "QBER graph not found. Run the v0.3 QBER experiment notebook to generate the graph."
     )
 
+st.markdown("---")
+st.subheader("Qiskit Circuit-Based BB84 Result")
+
+qiskit_figure_path = PROJECT_ROOT / "figures" / "qiskit_bb84_basis_results.png"
+
+if qiskit_figure_path.exists():
+    st.image(
+        str(qiskit_figure_path),
+        caption="Qiskit simulation of BB84 measurement behavior across basis choices."
+    )
+else:
+    st.warning(
+        "Qiskit BB84 graph not found. Run the v0.6 Qiskit BB84 notebook to generate the graph."
+    )
 
 st.markdown("---")
 st.subheader("Security Note")
