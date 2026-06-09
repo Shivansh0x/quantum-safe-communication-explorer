@@ -1,6 +1,7 @@
 import numpy as np
 
 from bb84 import run_bb84_with_eve
+from error_correction import parity_error_correction
 
 def message_to_bits(message):
     message_bytes = message.encode("utf-8")
@@ -76,24 +77,16 @@ def reconcile_keys_for_simulation(alice_key: np.ndarray, bob_key: np.ndarray):
 
     return reconciled_alice_key, reconciled_bob_key, mismatched_bits_removed
 
-def run_secure_message_exchange(
-    message: str,
-    n_qubits: int = 5000,
-    eve_intercept_prob: float = 0.0,
-    qber_threshold: float = 0.11,
-    use_simplified_reconciliation: bool = True
-) -> dict:
+def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.0, qber_threshold = 0.11, use_error_correction = True,
+    error_correction_block_size= 16, error_correction_passes= 5):
     """
     Run a simplified secure communication demo.
 
     1. Use BB84 to generate Alice and Bob's sifted keys.
     2. Calculate QBER.
     3. Abort if QBER is above the threshold.
-    4. If enabled, apply simplified educational reconciliation.
-    5. Encrypt and decrypt the message using the final matching key.
-
-    Note:
-    This is an educational simulation, not production cryptography.
+    4. Apply simplified parity-based error correction if enabled.
+    5. Encrypt and decrypt the message if the final keys match.
     """
 
     bb84_result = run_bb84_with_eve(
@@ -106,7 +99,6 @@ def run_secure_message_exchange(
     qber = bb84_result["qber"]
 
     message_bits = message_to_bits(message)
-
     raw_mismatches = int(np.sum(raw_alice_key != raw_bob_key))
 
     if qber > qber_threshold:
@@ -123,32 +115,46 @@ def run_secure_message_exchange(
             "alice_key_length": len(raw_alice_key),
             "bob_key_length": len(raw_bob_key),
             "raw_mismatches": raw_mismatches,
-            "mismatched_bits_removed": 0,
-            "reconciliation_used": False,
+            "final_mismatches": raw_mismatches,
+            "corrections_applied": 0,
+            "parity_checks": 0,
+            "error_correction_used": False,
             "ciphertext_bits": None,
             "ciphertext_display": None,
             "decrypted_message": None,
             "bb84_result": bb84_result
         }
 
-    if use_simplified_reconciliation:
-        alice_key, bob_key, mismatched_bits_removed = reconcile_keys_for_simulation(
+    if use_error_correction:
+        correction_result = parity_error_correction(
             raw_alice_key,
-            raw_bob_key
+            raw_bob_key,
+            block_size=error_correction_block_size,
+            passes=error_correction_passes
         )
-        reconciliation_used = True
+
+        alice_key = correction_result["corrected_alice_key"]
+        bob_key = correction_result["corrected_bob_key"]
+        final_mismatches = correction_result["final_mismatches"]
+        corrections_applied = correction_result["corrections_applied"]
+        parity_checks = correction_result["parity_checks"]
+        error_correction_used = True
+
     else:
         alice_key = raw_alice_key
         bob_key = raw_bob_key
-        mismatched_bits_removed = 0
-        reconciliation_used = False
+        final_mismatches = raw_mismatches
+        corrections_applied = 0
+        parity_checks = 0
+        error_correction_used = False
 
-    if not np.array_equal(alice_key, bob_key):
+    if final_mismatches != 0:
         return {
             "status": "aborted",
             "reason": (
-                "Alice and Bob's keys do not match exactly. "
-                "Enable simplified reconciliation or implement error correction."
+                "Alice and Bob's keys still do not match after the selected "
+                "error-correction settings. Increase qubits, reduce Eve probability, "
+                "or increase error-correction passes."
             ),
             "qber": qber,
             "qber_threshold": qber_threshold,
@@ -160,8 +166,10 @@ def run_secure_message_exchange(
             "alice_key_length": len(alice_key),
             "bob_key_length": len(bob_key),
             "raw_mismatches": raw_mismatches,
-            "mismatched_bits_removed": mismatched_bits_removed,
-            "reconciliation_used": reconciliation_used,
+            "final_mismatches": final_mismatches,
+            "corrections_applied": corrections_applied,
+            "parity_checks": parity_checks,
+            "error_correction_used": error_correction_used,
             "ciphertext_bits": None,
             "ciphertext_display": None,
             "decrypted_message": None,
@@ -182,8 +190,10 @@ def run_secure_message_exchange(
             "alice_key_length": len(alice_key),
             "bob_key_length": len(bob_key),
             "raw_mismatches": raw_mismatches,
-            "mismatched_bits_removed": mismatched_bits_removed,
-            "reconciliation_used": reconciliation_used,
+            "final_mismatches": final_mismatches,
+            "corrections_applied": corrections_applied,
+            "parity_checks": parity_checks,
+            "error_correction_used": error_correction_used,
             "ciphertext_bits": None,
             "ciphertext_display": None,
             "decrypted_message": None,
@@ -206,8 +216,10 @@ def run_secure_message_exchange(
         "alice_key_length": len(alice_key),
         "bob_key_length": len(bob_key),
         "raw_mismatches": raw_mismatches,
-        "mismatched_bits_removed": mismatched_bits_removed,
-        "reconciliation_used": reconciliation_used,
+        "final_mismatches": final_mismatches,
+        "corrections_applied": corrections_applied,
+        "parity_checks": parity_checks,
+        "error_correction_used": error_correction_used,
         "key_used": key_used_by_alice,
         "ciphertext_bits": ciphertext_bits,
         "ciphertext_display": bits_to_display_string(ciphertext_bits),

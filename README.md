@@ -94,6 +94,7 @@ The project currently supports BB84 simulation, Eve attack modeling, QBER experi
 - v0.6: Added Qiskit circuit-based BB84 demonstration
 - v0.7: Added project report and improved README readability
 - v0.8: Deployed the Streamlit dashboard and added live demo link
+- v0.9: Added parity-based error correction
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -343,3 +344,33 @@ The project is now publicly accessible through a live interactive dashboard. Use
 ### Next Step
 
 The next version may add simplified error correction, privacy amplification, or a technical blog series explaining the project.
+
+## Version 0.9: Parity-Based Error Correction
+
+This version replaces the earlier direct mismatch-removal reconciliation with a more meaningful error-correction step.
+
+After BB84 key generation, Alice and Bob's sifted keys may still contain mismatched bits when QBER is low but nonzero. This version uses parity-based block checks to locate and correct likely errors in Bob's key before message encryption.
+
+### New Features
+
+- Added parity-based error correction
+- Added block parity comparison
+- Added binary parity search for likely error locations
+- Added multiple shuffled correction passes
+- Added final mismatch tracking
+- Added correction metrics to the Streamlit dashboard
+- Added error-correction controls to the dashboard
+- Added error-correction demonstration notebook
+
+### Key Result
+
+The project now demonstrates why BB84 requires a reconciliation step. When Eve's interception is low enough that QBER remains below the threshold, Alice and Bob may still have mismatched raw keys. Error correction can reduce or eliminate these mismatches before encryption.
+
+### Output Files
+
+- src/error_correction.py
+- notebooks/06_error_correction_demo.ipynb
+
+### Next Step
+
+The next version may add privacy amplification, which compresses the reconciled key to reduce any information Eve may have gained during transmission and public reconciliation.

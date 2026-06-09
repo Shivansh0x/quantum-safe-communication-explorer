@@ -63,9 +63,23 @@ qber_threshold = st.sidebar.slider(
     step=0.01
 )
 
-use_simplified_reconciliation = st.sidebar.checkbox(
-    "Use simplified educational reconciliation",
+use_error_correction = st.sidebar.checkbox(
+    "Use parity-based error correction",
     value=True
+)
+
+error_correction_passes = st.sidebar.slider(
+    "Error-correction passes",
+    min_value=1,
+    max_value=10,
+    value=5,
+    step=1
+)
+
+error_correction_block_size = st.sidebar.selectbox(
+    "Error-correction block size",
+    options=[8, 16, 32, 64],
+    index=1
 )
 
 run_button = st.sidebar.button("Run secure message exchange")
@@ -109,7 +123,9 @@ if run_button:
             n_qubits=n_qubits,
             eve_intercept_prob=eve_intercept_prob,
             qber_threshold=qber_threshold,
-            use_simplified_reconciliation=use_simplified_reconciliation
+            use_error_correction=use_error_correction,
+            error_correction_block_size=error_correction_block_size,
+            error_correction_passes=error_correction_passes
         )
 
         st.subheader("Simulation Result")
@@ -135,7 +151,7 @@ if run_button:
         else:
             st.error(result["reason"])
 
-        st.markdown("### Key Information")
+        st.markdown("### Key and Error-Correction Information")
 
         key_col1, key_col2, key_col3, key_col4 = st.columns(4)
 
@@ -146,20 +162,32 @@ if run_button:
             st.metric("Raw Key Length", result["raw_alice_key_length"])
 
         with key_col3:
-            st.metric("Final Key Length", result["alice_key_length"])
+            st.metric("Raw Mismatches", result["raw_mismatches"])
 
         with key_col4:
-            st.metric("Bits Removed", result["mismatched_bits_removed"])
-        
-        if result["reconciliation_used"]:
+            st.metric("Final Mismatches", result["final_mismatches"])
+
+        ec_col1, ec_col2, ec_col3 = st.columns(3)
+
+        with ec_col1:
+            st.metric("Corrections Applied", result["corrections_applied"])
+
+        with ec_col2:
+            st.metric("Parity Checks", result["parity_checks"])
+
+        with ec_col3:
+            st.metric("Final Key Length", result["alice_key_length"])
+
+        if result["error_correction_used"]:
             st.info(
-                "Simplified educational reconciliation was used. "
-                "Mismatched key positions were removed in the simulation before encryption."
+                "Parity-based error correction was used. "
+                "This demonstrates the need for reconciliation after BB84, "
+                "but it is not production-grade error correction."
             )
         else:
             st.warning(
-                "Reconciliation is disabled. Alice and Bob's raw keys must match exactly."
-    )
+                "Error correction is disabled. Alice and Bob's raw keys must match exactly."
+            )
 
         st.markdown("### Message Exchange")
 
@@ -229,8 +257,11 @@ st.info(
     This project is an educational simulation, not production cryptographic software.
 
     The current encryption layer uses XOR as a one-time-pad style demonstration.
-    The simplified reconciliation option removes mismatched key positions using simulation-only access.
-    Real BB84 requires authenticated public discussion, error correction, privacy amplification,
-    proper key management, and carefully implemented cryptographic standards.
+    The parity-based error correction is an approximation inspired by
+    reconciliation protocols, but it is not production-grade BB84 error correction.
+
+    Real BB84 requires authenticated public discussion, robust error correction,
+    privacy amplification, proper key management, and carefully implemented
+    cryptographic standards.
     """
 )
