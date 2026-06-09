@@ -30,6 +30,23 @@ def calculate_qber(alice_key, bob_key):
     errors = np.sum(alice_key!=bob_key)
     return errors/len(alice_key)
 
+def apply_channel_noise(bits, noise_probability):
+    """
+    Apply simple bit-flip channel noise.
+
+    Each transmitted bit flips with probability noise_probability.
+    This models a simplified noisy quantum channel at the protocol level.
+    """
+    if noise_probability < 0 or noise_probability > 1:
+        raise ValueError("noise_probability must be between 0 and 1.")
+
+    noisy_bits = bits.copy()
+    noise_mask = np.random.random(size=len(bits)) < noise_probability
+
+    noisy_bits[noise_mask] = 1 - noisy_bits[noise_mask]
+
+    return noisy_bits, noise_mask
+
 def run_bb84_without_eve(n=20):
     alice_bits = generate_random_bits(n)
     alice_bases = generate_random_bases(n)
@@ -52,7 +69,7 @@ def run_bb84_without_eve(n=20):
         "qber": qber
     }
 
-def run_bb84_with_eve(n=1000, eve_intercept_prob=0.25):
+def run_bb84_with_eve(n=1000, eve_intercept_prob=0.25, channel_noise_prob=0.0):
     alice_bits = generate_random_bits(n)
     alice_bases = generate_random_bases(n)
 
@@ -71,6 +88,11 @@ def run_bb84_with_eve(n=1000, eve_intercept_prob=0.25):
             
             transmitted_bits[i] = eve_bit
             transmitted_bases[i] = eve_bases[i]
+    
+    transmitted_bits, channel_noise_mask = apply_channel_noise(
+        transmitted_bits,
+        noise_probability = channel_noise_prob
+    )
 
     bob_bases = generate_random_bases(n)
     bob_bits = bob_measurement(transmitted_bits, transmitted_bases, bob_bases)
@@ -90,5 +112,7 @@ def run_bb84_with_eve(n=1000, eve_intercept_prob=0.25):
         "bob_key": bob_key,
         "matching_positions": matching_positions,
         "qber": qber,
-        "eve_intercept_prob": eve_intercept_prob
+        "eve_intercept_prob": eve_intercept_prob,
+        "channel_noise_prob": channel_noise_prob,
+        "channel_noise_mask": channel_noise_mask
     }

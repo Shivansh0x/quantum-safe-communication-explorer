@@ -79,9 +79,9 @@ jupyter notebook
 
 ## Project Status
 
-Current version: v0.8
+Current version: v1.1
 
-The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, message encryption, interactive dashboard usage, Qiskit circuit demonstrations, research-style documentation, and a live deployed dashboard.
+The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, SHA256 encryption, parity-based error correction, privacy aplification, channel noise simulation, interactive dashboard usage, Qiskit circuit demonstrations, documentation, and a live deployed dashboard.
 
 ## Version History
 
@@ -96,6 +96,7 @@ The project currently supports BB84 simulation, Eve attack modeling, QBER experi
 - v0.8: Deployed the Streamlit dashboard and added live demo link
 - v0.9: Added parity-based error correction
 - v1.0: Added privacy amplification and final key derivation
+- v1.1: Added channel noise simulation and QBER analysis
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -406,3 +407,41 @@ BB84 key generation → QBER check → error correction → privacy amplificatio
 ### Next Step
 
 The next version may add channel noise simulation or a project write-up/blog series.
+
+## Version 1.1: Channel Noise Simulation
+
+This version adds channel noise simulation to the BB84 communication pipeline.
+
+Earlier versions modeled errors mainly through Eve's intercept-resend attack. This version adds a separate channel noise probability, allowing the project to compare errors caused by eavesdropping with errors caused by normal transmission noise.
+
+### New Features
+
+- Added simple bit-flip channel noise model
+- Added channel noise probability to BB84 simulation
+- Added channel noise control to the Streamlit dashboard
+- Added channel noise QBER experiment
+- Added channel noise visualization
+- Added channel noise result CSV
+
+### Key Result
+
+The project can now model QBER from two sources:
+
+```text
+Eve interception
++
+channel noise
+→ QBER
+```
+
+This makes the simulator more realistic and allows users to test how the protocol behaves under clean, noisy, attacked, and combined conditions.
+
+## Output Files
+
+- notebooks/08_channel_noise_demo.ipynb
+- results/channel_noise_experiment_results.csv
+- figures/qber_vs_channel_noise.png
+
+## Next Step
+
+The next version may add comparison experiments between Eve-only, noise-only, and Eve-plus-noise scenarios.

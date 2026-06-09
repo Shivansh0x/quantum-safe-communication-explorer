@@ -55,6 +55,14 @@ eve_intercept_prob = st.sidebar.slider(
     step=0.05
 )
 
+channel_noise_prob = st.sidebar.slider(
+    "Channel noise probability",
+    min_value=0.0,
+    max_value=0.20,
+    value=0.0,
+    step=0.01
+)
+
 qber_threshold = st.sidebar.slider(
     "QBER safety threshold",
     min_value=0.0,
@@ -135,6 +143,7 @@ if run_button:
             message=message,
             n_qubits=n_qubits,
             eve_intercept_prob=eve_intercept_prob,
+            channel_noise_prob=channel_noise_prob,
             qber_threshold=qber_threshold,
             use_error_correction=use_error_correction,
             error_correction_block_size=error_correction_block_size,
@@ -145,7 +154,7 @@ if run_button:
 
         st.subheader("Simulation Result")
 
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
 
         with col1:
             st.metric("Status", result["status"].upper())
@@ -158,6 +167,9 @@ if run_button:
 
         with col4:
             st.metric("Eve Interception", f"{result['eve_intercept_prob']:.2f}")
+        
+        with col5:
+            st.metric("Channel Noise", f"{result['channel_noise_prob']:.2f}")
 
         st.markdown("### Decision")
 
@@ -268,6 +280,21 @@ if qiskit_figure_path.exists():
 else:
     st.warning(
         "Qiskit BB84 graph not found. Run the v0.6 Qiskit BB84 notebook to generate the graph."
+    )
+
+st.markdown("---")
+st.subheader("Channel Noise Experiment Result")
+
+noise_figure_path = PROJECT_ROOT / "figures" / "qber_vs_channel_noise.png"
+
+if noise_figure_path.exists():
+    st.image(
+        str(noise_figure_path),
+        caption="QBER increases as channel noise increases in the BB84 simulation."
+    )
+else:
+    st.warning(
+        "Channel noise graph not found. Run the v1.1 channel noise notebook to generate the graph."
     )
 
 st.markdown("---")

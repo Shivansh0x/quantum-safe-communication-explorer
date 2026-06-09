@@ -80,7 +80,7 @@ def reconcile_keys_for_simulation(alice_key: np.ndarray, bob_key: np.ndarray):
 
 def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0.0, qber_threshold = 0.11,
     use_error_correction = True, error_correction_block_size = 16, error_correction_passes = 5, use_privacy_amplification = True,
-    privacy_compression_ratio= 0.5):
+    privacy_compression_ratio= 0.5, channel_noise_prob = 0.0):
     """
     Run the secure communication demo.
 
@@ -94,7 +94,8 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
 
     bb84_result = run_bb84_with_eve(
         n=n_qubits,
-        eve_intercept_prob=eve_intercept_prob
+        eve_intercept_prob=eve_intercept_prob,
+        channel_noise_prob=channel_noise_prob
     )
 
     raw_alice_key = np.array(bb84_result["alice_key"], dtype=np.uint8)
@@ -111,6 +112,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
             "qber": qber,
             "qber_threshold": qber_threshold,
             "eve_intercept_prob": eve_intercept_prob,
+            "channel_noise_prob": channel_noise_prob,
             "message": message,
             "message_bits_required": len(message_bits),
             "raw_alice_key_length": len(raw_alice_key),
@@ -165,6 +167,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
             "qber": qber,
             "qber_threshold": qber_threshold,
             "eve_intercept_prob": eve_intercept_prob,
+            "channel_noise_prob": channel_noise_prob,
             "message": message,
             "message_bits_required": len(message_bits),
             "raw_alice_key_length": len(raw_alice_key),
@@ -199,6 +202,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
                 "qber": qber,
                 "qber_threshold": qber_threshold,
                 "eve_intercept_prob": eve_intercept_prob,
+                "channel_noise_prob": channel_noise_prob,
                 "message": message,
                 "message_bits_required": len(message_bits),
                 "raw_alice_key_length": len(raw_alice_key),
@@ -244,6 +248,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
                 "qber": qber,
                 "qber_threshold": qber_threshold,
                 "eve_intercept_prob": eve_intercept_prob,
+                "channel_noise_prob": channel_noise_prob,
                 "message": message,
                 "message_bits_required": len(message_bits),
                 "raw_alice_key_length": len(raw_alice_key),
@@ -272,6 +277,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
             "qber": qber,
             "qber_threshold": qber_threshold,
             "eve_intercept_prob": eve_intercept_prob,
+            "channel_noise_prob": channel_noise_prob,
             "message": message,
             "message_bits_required": len(message_bits),
             "raw_alice_key_length": len(raw_alice_key),
@@ -302,6 +308,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0
         "qber": qber,
         "qber_threshold": qber_threshold,
         "eve_intercept_prob": eve_intercept_prob,
+        "channel_noise_prob": channel_noise_prob,
         "message": message,
         "message_bits_required": len(message_bits),
         "raw_alice_key_length": len(raw_alice_key),

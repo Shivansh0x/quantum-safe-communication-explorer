@@ -46,3 +46,42 @@ def run_qber_experiment(n=5000, interception_rates=None, trials_per_rate=20):
         })
 
     return pd.DataFrame(experiment_rows)
+
+def run_channel_noise_experiment(n=5000, noise_probabilities=None, trials_per_rate=20, eve_intercept_prob=0.0):
+    """
+    Run BB84 across multiple channel noise probabilities.
+
+    This experiment measures how QBER changes when the channel itself
+    introduces bit-flip noise, even when Eve is absent or fixed at a chosen level.
+    """
+
+    if noise_probabilities is None:
+        noise_probabilities = np.linspace(0, 0.20, 11)
+
+    experiment_rows = []
+
+    for noise_prob in noise_probabilities:
+        qber_values = []
+
+        for _ in range(trials_per_rate):
+            result = run_bb84_with_eve(
+                n=n,
+                eve_intercept_prob=eve_intercept_prob,
+                channel_noise_prob=float(noise_prob)
+            )
+
+            qber_values.append(result["qber"])
+
+        avg_qber = np.mean(qber_values)
+        std_qber = np.std(qber_values)
+
+        experiment_rows.append({
+            "channel_noise_probability": float(noise_prob),
+            "eve_interception_rate": float(eve_intercept_prob),
+            "average_qber": avg_qber,
+            "std_qber": std_qber,
+            "trials_per_rate": trials_per_rate,
+            "qubits_per_trial": n
+        })
+
+    return pd.DataFrame(experiment_rows)
