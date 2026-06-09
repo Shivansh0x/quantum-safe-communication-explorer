@@ -2,6 +2,7 @@ import numpy as np
 
 from bb84 import run_bb84_with_eve
 from error_correction import parity_error_correction
+from privacy_amplification import derive_final_key_bits, key_fingerprint
 
 def message_to_bits(message):
     message_bytes = message.encode("utf-8")
@@ -77,16 +78,18 @@ def reconcile_keys_for_simulation(alice_key: np.ndarray, bob_key: np.ndarray):
 
     return reconciled_alice_key, reconciled_bob_key, mismatched_bits_removed
 
-def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.0, qber_threshold = 0.11, use_error_correction = True,
-    error_correction_block_size= 16, error_correction_passes= 5):
+def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob = 0.0, qber_threshold = 0.11,
+    use_error_correction = True, error_correction_block_size = 16, error_correction_passes = 5, use_privacy_amplification = True,
+    privacy_compression_ratio= 0.5):
     """
-    Run a simplified secure communication demo.
+    Run the secure communication demo.
 
-    1. Use BB84 to generate Alice and Bob's sifted keys.
-    2. Calculate QBER.
-    3. Abort if QBER is above the threshold.
-    4. Apply simplified parity-based error correction if enabled.
-    5. Encrypt and decrypt the message if the final keys match.
+    Pipeline:
+    1. Generate BB84 sifted keys.
+    2. Check QBER.
+    3. Apply parity-based error correction.
+    4. Apply privacy amplification / final key derivation.
+    5. Encrypt and decrypt the message.
     """
 
     bb84_result = run_bb84_with_eve(
@@ -112,6 +115,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
             "message_bits_required": len(message_bits),
             "raw_alice_key_length": len(raw_alice_key),
             "raw_bob_key_length": len(raw_bob_key),
+            "reconciled_key_length": 0,
             "alice_key_length": len(raw_alice_key),
             "bob_key_length": len(raw_bob_key),
             "raw_mismatches": raw_mismatches,
@@ -119,6 +123,9 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
             "corrections_applied": 0,
             "parity_checks": 0,
             "error_correction_used": False,
+            "privacy_amplification_used": False,
+            "privacy_compression_ratio": privacy_compression_ratio,
+            "final_key_fingerprint": None,
             "ciphertext_bits": None,
             "ciphertext_display": None,
             "decrypted_message": None,
@@ -133,16 +140,16 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
             passes=error_correction_passes
         )
 
-        alice_key = correction_result["corrected_alice_key"]
-        bob_key = correction_result["corrected_bob_key"]
+        reconciled_alice_key = correction_result["corrected_alice_key"]
+        reconciled_bob_key = correction_result["corrected_bob_key"]
         final_mismatches = correction_result["final_mismatches"]
         corrections_applied = correction_result["corrections_applied"]
         parity_checks = correction_result["parity_checks"]
         error_correction_used = True
 
     else:
-        alice_key = raw_alice_key
-        bob_key = raw_bob_key
+        reconciled_alice_key = raw_alice_key
+        reconciled_bob_key = raw_bob_key
         final_mismatches = raw_mismatches
         corrections_applied = 0
         parity_checks = 0
@@ -152,9 +159,8 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
         return {
             "status": "aborted",
             "reason": (
-                "Alice and Bob's keys still do not match after the selected "
-                "error-correction settings. Increase qubits, reduce Eve probability, "
-                "or increase error-correction passes."
+                "Alice and Bob's keys still do not match after correction. "
+                "Try increasing qubits, reducing Eve probability, or increasing correction passes."
             ),
             "qber": qber,
             "qber_threshold": qber_threshold,
@@ -163,23 +169,106 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
             "message_bits_required": len(message_bits),
             "raw_alice_key_length": len(raw_alice_key),
             "raw_bob_key_length": len(raw_bob_key),
-            "alice_key_length": len(alice_key),
-            "bob_key_length": len(bob_key),
+            "reconciled_key_length": len(reconciled_alice_key),
+            "alice_key_length": len(reconciled_alice_key),
+            "bob_key_length": len(reconciled_bob_key),
             "raw_mismatches": raw_mismatches,
             "final_mismatches": final_mismatches,
             "corrections_applied": corrections_applied,
             "parity_checks": parity_checks,
             "error_correction_used": error_correction_used,
+            "privacy_amplification_used": False,
+            "privacy_compression_ratio": privacy_compression_ratio,
+            "final_key_fingerprint": None,
             "ciphertext_bits": None,
             "ciphertext_display": None,
             "decrypted_message": None,
             "bb84_result": bb84_result
         }
 
-    if len(alice_key) < len(message_bits) or len(bob_key) < len(message_bits):
+    if use_privacy_amplification:
+        max_final_key_bits = int(len(reconciled_alice_key) * privacy_compression_ratio)
+
+        if len(message_bits) > max_final_key_bits:
+            return {
+                "status": "aborted",
+                "reason": (
+                    "Not enough reconciled key material after privacy amplification. "
+                    "Increase n_qubits or shorten the message."
+                ),
+                "qber": qber,
+                "qber_threshold": qber_threshold,
+                "eve_intercept_prob": eve_intercept_prob,
+                "message": message,
+                "message_bits_required": len(message_bits),
+                "raw_alice_key_length": len(raw_alice_key),
+                "raw_bob_key_length": len(raw_bob_key),
+                "reconciled_key_length": len(reconciled_alice_key),
+                "alice_key_length": max_final_key_bits,
+                "bob_key_length": max_final_key_bits,
+                "raw_mismatches": raw_mismatches,
+                "final_mismatches": final_mismatches,
+                "corrections_applied": corrections_applied,
+                "parity_checks": parity_checks,
+                "error_correction_used": error_correction_used,
+                "privacy_amplification_used": True,
+                "privacy_compression_ratio": privacy_compression_ratio,
+                "final_key_fingerprint": None,
+                "ciphertext_bits": None,
+                "ciphertext_display": None,
+                "decrypted_message": None,
+                "bb84_result": bb84_result
+            }
+
+        alice_key = derive_final_key_bits(
+            reconciled_alice_key,
+            output_length_bits=len(message_bits)
+        )
+
+        bob_key = derive_final_key_bits(
+            reconciled_bob_key,
+            output_length_bits=len(message_bits)
+        )
+
+        privacy_amplification_used = True
+
+    else:
+        alice_key = reconciled_alice_key
+        bob_key = reconciled_bob_key
+        privacy_amplification_used = False
+
+        if len(alice_key) < len(message_bits) or len(bob_key) < len(message_bits):
+            return {
+                "status": "aborted",
+                "reason": "Final key is too short for this message. Increase n_qubits.",
+                "qber": qber,
+                "qber_threshold": qber_threshold,
+                "eve_intercept_prob": eve_intercept_prob,
+                "message": message,
+                "message_bits_required": len(message_bits),
+                "raw_alice_key_length": len(raw_alice_key),
+                "raw_bob_key_length": len(raw_bob_key),
+                "reconciled_key_length": len(reconciled_alice_key),
+                "alice_key_length": len(alice_key),
+                "bob_key_length": len(bob_key),
+                "raw_mismatches": raw_mismatches,
+                "final_mismatches": final_mismatches,
+                "corrections_applied": corrections_applied,
+                "parity_checks": parity_checks,
+                "error_correction_used": error_correction_used,
+                "privacy_amplification_used": privacy_amplification_used,
+                "privacy_compression_ratio": privacy_compression_ratio,
+                "final_key_fingerprint": None,
+                "ciphertext_bits": None,
+                "ciphertext_display": None,
+                "decrypted_message": None,
+                "bb84_result": bb84_result
+            }
+
+    if not np.array_equal(alice_key, bob_key):
         return {
             "status": "aborted",
-            "reason": "Final key is too short for this message. Increase n_qubits.",
+            "reason": "Final derived keys do not match.",
             "qber": qber,
             "qber_threshold": qber_threshold,
             "eve_intercept_prob": eve_intercept_prob,
@@ -187,6 +276,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
             "message_bits_required": len(message_bits),
             "raw_alice_key_length": len(raw_alice_key),
             "raw_bob_key_length": len(raw_bob_key),
+            "reconciled_key_length": len(reconciled_alice_key),
             "alice_key_length": len(alice_key),
             "bob_key_length": len(bob_key),
             "raw_mismatches": raw_mismatches,
@@ -194,6 +284,9 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
             "corrections_applied": corrections_applied,
             "parity_checks": parity_checks,
             "error_correction_used": error_correction_used,
+            "privacy_amplification_used": privacy_amplification_used,
+            "privacy_compression_ratio": privacy_compression_ratio,
+            "final_key_fingerprint": None,
             "ciphertext_bits": None,
             "ciphertext_display": None,
             "decrypted_message": None,
@@ -213,6 +306,7 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
         "message_bits_required": len(message_bits),
         "raw_alice_key_length": len(raw_alice_key),
         "raw_bob_key_length": len(raw_bob_key),
+        "reconciled_key_length": len(reconciled_alice_key),
         "alice_key_length": len(alice_key),
         "bob_key_length": len(bob_key),
         "raw_mismatches": raw_mismatches,
@@ -220,6 +314,9 @@ def run_secure_message_exchange(message, n_qubits = 5000, eve_intercept_prob= 0.
         "corrections_applied": corrections_applied,
         "parity_checks": parity_checks,
         "error_correction_used": error_correction_used,
+        "privacy_amplification_used": privacy_amplification_used,
+        "privacy_compression_ratio": privacy_compression_ratio,
+        "final_key_fingerprint": key_fingerprint(alice_key),
         "key_used": key_used_by_alice,
         "ciphertext_bits": ciphertext_bits,
         "ciphertext_display": bits_to_display_string(ciphertext_bits),

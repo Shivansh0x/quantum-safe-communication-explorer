@@ -82,6 +82,19 @@ error_correction_block_size = st.sidebar.selectbox(
     index=1
 )
 
+use_privacy_amplification = st.sidebar.checkbox(
+    "Use privacy amplification",
+    value=True
+)
+
+privacy_compression_ratio = st.sidebar.slider(
+    "Privacy compression ratio",
+    min_value=0.25,
+    max_value=0.90,
+    value=0.50,
+    step=0.05
+)
+
 run_button = st.sidebar.button("Run secure message exchange")
 
 
@@ -125,7 +138,9 @@ if run_button:
             qber_threshold=qber_threshold,
             use_error_correction=use_error_correction,
             error_correction_block_size=error_correction_block_size,
-            error_correction_passes=error_correction_passes
+            error_correction_passes=error_correction_passes,
+            use_privacy_amplification=use_privacy_amplification,
+            privacy_compression_ratio=privacy_compression_ratio
         )
 
         st.subheader("Simulation Result")
@@ -151,43 +166,49 @@ if run_button:
         else:
             st.error(result["reason"])
 
-        st.markdown("### Key and Error-Correction Information")
+        st.markdown("### Key Information")
 
         key_col1, key_col2, key_col3, key_col4 = st.columns(4)
 
         with key_col1:
-            st.metric("Message Bits Required", result["message_bits_required"])
+            st.metric("Message Bits", result["message_bits_required"])
 
         with key_col2:
             st.metric("Raw Key Length", result["raw_alice_key_length"])
 
         with key_col3:
-            st.metric("Raw Mismatches", result["raw_mismatches"])
+            st.metric("Reconciled Length", result["reconciled_key_length"])
 
         with key_col4:
-            st.metric("Final Mismatches", result["final_mismatches"])
+            st.metric("Final Key Bits", result["alice_key_length"])
 
-        ec_col1, ec_col2, ec_col3 = st.columns(3)
+        ec_col1, ec_col2, ec_col3, ec_col4 = st.columns(4)
 
         with ec_col1:
-            st.metric("Corrections Applied", result["corrections_applied"])
+            st.metric("Raw Mismatches", result["raw_mismatches"])
 
         with ec_col2:
-            st.metric("Parity Checks", result["parity_checks"])
+            st.metric("Final Mismatches", result["final_mismatches"])
 
         with ec_col3:
-            st.metric("Final Key Length", result["alice_key_length"])
+            st.metric("Corrections", result["corrections_applied"])
 
-        if result["error_correction_used"]:
-            st.info(
-                "Parity-based error correction was used. "
-                "This demonstrates the need for reconciliation after BB84, "
-                "but it is not production-grade error correction."
+        with ec_col4:
+            st.metric("Parity Checks", result["parity_checks"])
+
+        st.markdown("### Key Derivation")
+
+        if result["privacy_amplification_used"]:
+            st.write(
+                f"Privacy amplification enabled with compression ratio "
+                f"{result['privacy_compression_ratio']:.2f}."
             )
+
+            if result["final_key_fingerprint"]:
+                st.write("Final key fingerprint:")
+                st.code(result["final_key_fingerprint"], language="text")
         else:
-            st.warning(
-                "Error correction is disabled. Alice and Bob's raw keys must match exactly."
-            )
+            st.write("Privacy amplification disabled.")
 
         st.markdown("### Message Exchange")
 
@@ -252,16 +273,13 @@ else:
 st.markdown("---")
 st.subheader("Security Note")
 
-st.info(
-    """
-    This project is an educational simulation, not production cryptographic software.
-
-    The current encryption layer uses XOR as a one-time-pad style demonstration.
-    The parity-based error correction is an approximation inspired by
-    reconciliation protocols, but it is not production-grade BB84 error correction.
-
-    Real BB84 requires authenticated public discussion, robust error correction,
-    privacy amplification, proper key management, and carefully implemented
-    cryptographic standards.
-    """
-)
+with st.expander("Technical assumptions"):
+    st.write(
+        "This dashboard is a simulation of the BB84 workflow. "
+        "The implementation includes BB84 key generation, QBER checks, "
+        "parity-based correction, privacy amplification, and XOR-based message encryption."
+    )
+    st.write(
+        "Production QKD systems require authenticated channels, hardware-level considerations, "
+        "robust reconciliation, privacy amplification, and standard cryptographic engineering."
+    )

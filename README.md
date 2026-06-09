@@ -95,6 +95,7 @@ The project currently supports BB84 simulation, Eve attack modeling, QBER experi
 - v0.7: Added project report and improved README readability
 - v0.8: Deployed the Streamlit dashboard and added live demo link
 - v0.9: Added parity-based error correction
+- v1.0: Added privacy amplification and final key derivation
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -374,3 +375,34 @@ The project now demonstrates why BB84 requires a reconciliation step. When Eve's
 ### Next Step
 
 The next version may add privacy amplification, which compresses the reconciled key to reduce any information Eve may have gained during transmission and public reconciliation.
+
+## Version 1.0: Privacy Amplification and Final Key Derivation
+
+This version adds a final key derivation step after BB84 key generation and parity-based correction.
+
+After Alice and Bob generate sifted keys and correct mismatches, the reconciled key is compressed into a shorter final key using a hash-based privacy amplification step. The final key is then used for message encryption and decryption.
+
+### New Features
+
+- Added privacy amplification module
+- Added SHAKE-256 based final key derivation
+- Added privacy compression ratio control
+- Added final key fingerprint display
+- Updated dashboard key-processing metrics
+- Added privacy amplification notebook
+- Reduced repeated warning text in the dashboard
+
+### Key Result
+
+The project now follows a more complete BB84-inspired communication pipeline:
+
+BB84 key generation → QBER check → error correction → privacy amplification → message encryption
+
+### Output Files
+
+- src/privacy_amplification.py
+- notebooks/07_privacy_amplification_demo.ipynb
+
+### Next Step
+
+The next version may add channel noise simulation or a project write-up/blog series.
