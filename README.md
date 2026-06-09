@@ -79,7 +79,7 @@ jupyter notebook
 
 ## Project Status
 
-Current version: v1.1
+Current version: v1.2
 
 The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, SHA256 encryption, parity-based error correction, privacy aplification, channel noise simulation, interactive dashboard usage, Qiskit circuit demonstrations, documentation, and a live deployed dashboard.
 
@@ -97,6 +97,7 @@ The project currently supports BB84 simulation, Eve attack modeling, QBER experi
 - v0.9: Added parity-based error correction
 - v1.0: Added privacy amplification and final key derivation
 - v1.1: Added channel noise simulation and QBER analysis
+- v1.2: Added Eve vs channel noise comparison experiment
 
 ## Version 0.1: BB84 Without Eavesdropping
 
@@ -445,3 +446,36 @@ This makes the simulator more realistic and allows users to test how the protoco
 ## Next Step
 
 The next version may add comparison experiments between Eve-only, noise-only, and Eve-plus-noise scenarios.
+
+## Version 1.2: Eve vs Channel Noise Comparison
+
+This version adds a comparison experiment across four BB84 communication scenarios:
+
+- Clean channel
+- Noise only
+- Eve only
+- Eve + noise
+
+Earlier versions allowed Eve interception and channel noise to be tested separately. This version compares them side by side to show how each source contributes to QBER.
+
+### New Features
+
+- Added Eve vs noise comparison experiment
+- Added four-scenario QBER comparison
+- Added comparison result CSV
+- Added comparison graph
+- Added comparison graph to the Streamlit dashboard
+
+### Key Result
+
+The project can now compare QBER across clean, noisy, attacked, and combined conditions. This makes it easier to see how natural channel noise and eavesdropping affect BB84 communication differently.
+
+### Output Files
+
+- notebooks/09_eve_noise_comparison.ipynb
+- results/eve_noise_comparison_results.csv
+- figures/eve_noise_comparison_qber.png
+
+### Next Step
+
+The next version may update the project report and add a blog-style explanation of the full BB84 pipeline.

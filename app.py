@@ -298,6 +298,21 @@ else:
     )
 
 st.markdown("---")
+st.subheader("Eve vs Channel Noise Comparison")
+
+comparison_figure_path = PROJECT_ROOT / "figures" / "eve_noise_comparison_qber.png"
+
+if comparison_figure_path.exists():
+    st.image(
+        str(comparison_figure_path),
+        caption="Comparison of QBER across clean, noisy, attacked, and combined scenarios."
+    )
+else:
+    st.warning(
+        "Eve vs noise comparison graph not found. Run the v1.2 comparison notebook to generate the graph."
+    )
+
+st.markdown("---")
 st.subheader("Security Note")
 
 with st.expander("Technical assumptions"):

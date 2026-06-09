@@ -85,3 +85,69 @@ def run_channel_noise_experiment(n=5000, noise_probabilities=None, trials_per_ra
         })
 
     return pd.DataFrame(experiment_rows)
+
+def run_eve_noise_comparison_experiment(n = 5000, trials_per_scenario= 20, eve_intercept_prob = 0.10, 
+                                        channel_noise_prob = 0.03):
+    """
+    Compare QBER across four BB84 communication scenarios:
+
+    1. Clean channel: no Eve, no noise
+    2. Noise only: no Eve, channel noise present
+    3. Eve only: Eve present, no channel noise
+    4. Eve + noise: both Eve and channel noise present
+
+    This helps separate errors caused by eavesdropping from errors caused
+    by ordinary channel noise.
+    """
+
+    scenarios = [
+        {
+            "scenario": "Clean channel",
+            "eve_interception_rate": 0.0,
+            "channel_noise_probability": 0.0
+        },
+        {
+            "scenario": "Noise only",
+            "eve_interception_rate": 0.0,
+            "channel_noise_probability": channel_noise_prob
+        },
+        {
+            "scenario": "Eve only",
+            "eve_interception_rate": eve_intercept_prob,
+            "channel_noise_probability": 0.0
+        },
+        {
+            "scenario": "Eve + noise",
+            "eve_interception_rate": eve_intercept_prob,
+            "channel_noise_probability": channel_noise_prob
+        }
+    ]
+
+    experiment_rows = []
+
+    for scenario in scenarios:
+        qber_values = []
+
+        for _ in range(trials_per_scenario):
+            result = run_bb84_with_eve(
+                n=n,
+                eve_intercept_prob=scenario["eve_interception_rate"],
+                channel_noise_prob=scenario["channel_noise_probability"]
+            )
+
+            qber_values.append(result["qber"])
+
+        avg_qber = np.mean(qber_values)
+        std_qber = np.std(qber_values)
+
+        experiment_rows.append({
+            "scenario": scenario["scenario"],
+            "eve_interception_rate": scenario["eve_interception_rate"],
+            "channel_noise_probability": scenario["channel_noise_probability"],
+            "average_qber": avg_qber,
+            "std_qber": std_qber,
+            "trials_per_scenario": trials_per_scenario,
+            "qubits_per_trial": n
+        })
+
+    return pd.DataFrame(experiment_rows)

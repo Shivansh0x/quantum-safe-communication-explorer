@@ -1,0 +1,5 @@
+scenario,eve_interception_rate,channel_noise_probability,average_qber,std_qber,trials_per_scenario,qubits_per_trial
+Clean channel,0.0,0.0,0.0,0.0,30,5000
+Noise only,0.0,0.03,0.029945226695196624,0.0030474039806310574,30,5000
+Eve only,0.1,0.0,0.02543285757714927,0.002848453808445792,30,5000
+Eve + noise,0.1,0.03,0.05410233118668687,0.0047060486014413065,30,5000
