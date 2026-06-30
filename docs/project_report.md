@@ -1,5 +1,7 @@
 # Quantum-Safe Communication Explorer
 
+This report reflects the v2.0 release of the project, including BB84 simulation, QBER analysis, error correction, privacy amplification, Qiskit simulation, IBM Quantum hardware results, and dashboard deployment.
+
 ## Abstract
 
 Quantum-Safe Communication Explorer is a simulation, experimentation, and visualization project for studying BB84 Quantum Key Distribution. The project models key generation between Alice and Bob, Eve's intercept-resend attack, channel noise, Quantum Bit Error Rate analysis, parity-based error correction, privacy amplification, message encryption, Qiskit circuit simulation, Qiskit Aer noise models, and selected IBM Quantum hardware runs.
@@ -449,30 +451,25 @@ IBM Quantum hardware jobs are run from notebooks, not from the public dashboard.
 This project is a simulation and analysis platform. Important limitations include:
 
 - no real-time quantum hardware execution from the dashboard
-- simplified protocol-level channel noise
-- parity-based correction rather than a production reconciliation protocol
 - XOR-based message encryption for demonstration
 - no full authentication layer
 - no real-world key management system
-- limited hardware experiments
+- small-scale IBM Quantum hardware experiments rather than large hardware benchmarking
 - no comparison with entanglement-based QKD yet
 
 These limitations are natural future directions for the project.
 
 ## 9. Future Work
 
-Possible future improvements include:
+The v2.0 release completes the main BB84 simulation and analysis pipeline. Optional future extensions include:
 
-- final v2.0 repository polish
-- stronger dashboard result summaries
-- Qiskit Aer noise model expansion
-- more IBM hardware runs
+- more IBM Quantum hardware runs
 - comparison with E91 entanglement-based QKD
 - BB84 vs E91 comparison
 - expanded attack models
 - stronger reconciliation experiments
 - deeper privacy amplification analysis
-- public technical articles after the project is complete
+- public technical articles explaining the project
 
 ## 10. Conclusion
 

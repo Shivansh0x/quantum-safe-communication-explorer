@@ -12,23 +12,28 @@ Try the interactive dashboard here:
 
 ## Main Features
 
-* BB84 Quantum Key Distribution simulation
-* Eve intercept-resend attack model
-* QBER experiment and visualization
-* Message encryption using BB84-generated keys
-* Parity-based error correction
-* Privacy amplification using SHAKE-256 based final key derivation
-* Channel noise simulation
-* Eve vs channel noise comparison experiment
-* Qiskit circuit-based BB84 demonstration
-* Qiskit Aer noise model experiment
-* IBM Quantum hardware demonstration
-* Streamlit interactive dashboard
-* Research-style project report
-* Error correction parameter sweep
-* Privacy amplification parameter sweep
-* Organized dashboard experiment tabs
-* Final results summary
+### Protocol Simulation
+- BB84 Quantum Key Distribution simulation
+- Eve intercept-resend attack model
+- Channel noise simulation
+- QBER analysis and visualization
+
+### Key Processing
+- Parity-based error correction
+- Privacy amplification using SHAKE-256 based final key derivation
+- Message encryption using BB84-generated keys
+- Error correction and privacy amplification parameter sweeps
+
+### Quantum Circuit and Hardware Experiments
+- Qiskit circuit-based BB84 demonstration
+- Qiskit Aer noise model experiment
+- IBM Quantum hardware demonstration
+
+### Interface and Documentation
+- Streamlit interactive dashboard
+- Organized dashboard experiment tabs
+- Research-style project report
+- Final results summary
 
 ## Project Architecture
 
@@ -68,7 +73,7 @@ Circuit-Level Result Comparison
 
 ## Dashboard Preview
 
-![Dashboard Preview](figures/dashboard_v0_5.png)
+![Dashboard Preview](figures/dashboard_v2_0.png)
 
 ## How to Run
 
@@ -111,7 +116,7 @@ After that, the IBM hardware notebook can load the saved account automatically.
 
 ## Project Status
 
-Current version: **v1.8.1**
+Current version: **v2.0**
 
 The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, error correction parameter sweeps, privacy amplification parameter sweeps, message encryption, project documentation, and a live deployed dashboard.
 
@@ -250,6 +255,9 @@ figures/error_correction_success_rate.png
 figures/error_correction_parity_checks.png
 figures/privacy_amplification_success_rate.png
 figures/privacy_amplification_key_capacity.png
+
+docs/project_report.md
+docs/final_results_summary.md
 ```
 
 ## Version History
@@ -274,44 +282,42 @@ figures/privacy_amplification_key_capacity.png
 * v1.7: Added privacy amplification parameter sweep
 * v1.8: Organized dashboard and added final results summary
 * v1.8.1: Restored populated notebooks
+* v2.0: Final polished release of the BB84 simulation and analysis platform
 
-## Version 1.8: Dashboard and Documentation Cleanup
+## Version 2.0: Complete BB84 Simulation and Analysis Platform
 
-This version improves the dashboard organization and adds a concise final results summary.
+This release finalizes the Quantum-Safe Communication Explorer as a complete BB84 simulation and analysis platform.
 
-### New Updates
+### Final Updates
 
-- Organized dashboard sections into tabs
-- Grouped QBER experiment graphs
-- Grouped circuit and hardware results
-- Grouped key-processing experiments
-- Added concise technical notes section
-- Added final results summary document
-- Updated README and project report for the current pipeline
+- Verified populated notebooks
+- Verified generated result CSV files
+- Verified generated figures
+- Cleaned and organized Streamlit dashboard
+- Updated final results summary
+- Updated project report
+- Updated README for the full pipeline
+- Verified live demo deployment
 
-### Output Files
+### Current Capabilities
 
-- docs/final_results_summary.md
+- BB84 key generation simulation
+- Eve intercept-resend attack modeling
+- QBER experiments
+- Channel noise simulation
+- Eve vs noise comparison
+- Qiskit circuit validation
+- Qiskit Aer noisy simulation
+- IBM Quantum hardware demonstration
+- Parity-based error correction
+- Privacy amplification
+- Message encryption and decryption
+- Interactive Streamlit dashboard
 
-### Next Step
+### Key Result
 
-The next version will prepare the final v2.0 release with updated documentation, rerun notebooks, verified graphs, and final repository cleanup.
+The project now demonstrates a full BB84-inspired communication pipeline from quantum key generation to encrypted message transmission, while also analyzing eavesdropping, noise, circuit-level behavior, hardware behavior, error correction, and privacy amplification.
 
-## Version 1.8.1: Notebook Restoration Patch
+### Future Work
 
-This patch restores populated notebook files that were previously committed as empty notebook files.
-
-### Fixed Files
-
-- notebooks/01_bb84_basics.ipynb
-- notebooks/02_eve_attack_simulation.ipynb
-- notebooks/08_channel_noise_demo.ipynb
-- notebooks/09_eve_noise_comparison.ipynb
-- notebooks/10_qiskit_noise_models.ipynb
-- notebooks/11_ibm_hardware_demo.ipynb
-- notebooks/12_error_correction_parameter_sweep.ipynb
-- notebooks/13_privacy_amplification_parameter_sweep.ipynb
-
-## Notes
-
-This project is a simulation and research-style learning project. It is designed to explain and explore BB84-style quantum-safe communication concepts through code, experiments, visualization, and hardware-backed demonstrations.
+Possible future extensions include E91 entanglement-based QKD, expanded attack models, stronger reconciliation protocols, additional IBM Quantum hardware runs, and public technical articles explaining the project.

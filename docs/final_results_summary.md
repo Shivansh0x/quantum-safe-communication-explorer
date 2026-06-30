@@ -6,7 +6,7 @@ This document summarizes the main results from the Quantum-Safe Communication Ex
 
 The project studies BB84 Quantum Key Distribution through protocol-level simulation, Qiskit circuit simulation, Qiskit Aer noisy simulation, IBM Quantum hardware runs, and an interactive Streamlit dashboard. Across the project, the main goal is to understand how BB84-style communication behaves under eavesdropping, channel noise, error correction, privacy amplification, and real-device imperfections.
 
-The current project pipeline is:
+The v2.0 project pipeline is:
 
 ```text
 BB84 key generation
