@@ -1,5 +1,5 @@
 case,alice_bit,alice_basis,bob_basis,same_basis,backend_name,job_id,shots,count_0,count_1,prob_0,prob_1
-same_basis_Z_bit_0,0,Z,Z,True,ibm_marrakesh,d91lnjnccmks73d5e3j0,1000,999,1,0.999,0.001
-same_basis_X_bit_0,0,X,X,True,ibm_marrakesh,d91lnonccmks73d5e3rg,1000,1000,0,1.0,0.0
-different_basis_Z_to_X,0,Z,X,False,ibm_marrakesh,d91lnvnccmks73d5e480,1000,504,496,0.504,0.496
-different_basis_X_to_Z,0,X,Z,False,ibm_marrakesh,d91lo4nccmks73d5e4f0,1000,493,507,0.493,0.507
+same_basis_Z_bit_0,0,Z,Z,True,ibm_kingston,d91milr57qjs73b6lsd0,1000,975,25,0.975,0.025
+same_basis_X_bit_0,0,X,X,True,ibm_kingston,d91mirvqq29s738o08jg,1000,973,27,0.973,0.027
+different_basis_Z_to_X,0,Z,X,False,ibm_kingston,d91mj17qq29s738o090g,1000,498,502,0.498,0.502
+different_basis_X_to_Z,0,X,Z,False,ibm_kingston,d91mj5r57qjs73b6ltgg,1000,512,488,0.512,0.488

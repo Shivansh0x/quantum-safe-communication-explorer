@@ -111,7 +111,7 @@ After that, the IBM hardware notebook can load the saved account automatically.
 
 ## Project Status
 
-Current version: **v1.7**
+Current version: **v1.8.1**
 
 The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, error correction parameter sweeps, privacy amplification parameter sweeps, message encryption, project documentation, and a live deployed dashboard.
 
@@ -273,6 +273,7 @@ figures/privacy_amplification_key_capacity.png
 * v1.6: Added error correction parameter sweep
 * v1.7: Added privacy amplification parameter sweep
 * v1.8: Organized dashboard and added final results summary
+* v1.8.1: Restored populated notebooks
 
 ## Version 1.8: Dashboard and Documentation Cleanup
 
@@ -295,6 +296,21 @@ This version improves the dashboard organization and adds a concise final result
 ### Next Step
 
 The next version will prepare the final v2.0 release with updated documentation, rerun notebooks, verified graphs, and final repository cleanup.
+
+## Version 1.8.1: Notebook Restoration Patch
+
+This patch restores populated notebook files that were previously committed as empty notebook files.
+
+### Fixed Files
+
+- notebooks/01_bb84_basics.ipynb
+- notebooks/02_eve_attack_simulation.ipynb
+- notebooks/08_channel_noise_demo.ipynb
+- notebooks/09_eve_noise_comparison.ipynb
+- notebooks/10_qiskit_noise_models.ipynb
+- notebooks/11_ibm_hardware_demo.ipynb
+- notebooks/12_error_correction_parameter_sweep.ipynb
+- notebooks/13_privacy_amplification_parameter_sweep.ipynb
 
 ## Notes
 
