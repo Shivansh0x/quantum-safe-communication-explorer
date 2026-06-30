@@ -6,3 +6,4 @@ streamlit
 qiskit
 qiskit-aer
 pylatexenc
+qiskit-ibm-runtime

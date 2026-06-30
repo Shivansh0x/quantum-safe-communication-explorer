@@ -328,6 +328,21 @@ else:
     )
 
 st.markdown("---")
+st.subheader("IBM Quantum Hardware Result")
+
+ibm_hardware_figure_path = PROJECT_ROOT / "figures" / "ibm_hardware_comparison.png"
+
+if ibm_hardware_figure_path.exists():
+    st.image(
+        str(ibm_hardware_figure_path),
+        caption="Selected BB84 circuits run on IBM Quantum hardware."
+    )
+else:
+    st.warning(
+        "IBM hardware graph not found. Run the v1.5 IBM hardware notebook to generate the graph."
+    )
+
+st.markdown("---")
 st.subheader("Security Note")
 
 with st.expander("Technical assumptions"):
