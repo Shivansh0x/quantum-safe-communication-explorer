@@ -2,95 +2,145 @@
 
 ## Abstract
 
-Quantum-Safe Communication Explorer studies BB84 Quantum Key Distribution through simulation, experimentation, visualization, and circuit-level validation. The project models key generation between Alice and Bob, Eve's intercept-resend attack, channel noise, QBER analysis, parity-based error correction, privacy amplification, and message encryption using derived keys. It also includes Qiskit-based circuit demonstrations and an interactive Streamlit dashboard.
+Quantum-Safe Communication Explorer is a simulation, experimentation, and visualization project for studying BB84 Quantum Key Distribution. The project models key generation between Alice and Bob, Eve's intercept-resend attack, channel noise, Quantum Bit Error Rate analysis, parity-based error correction, privacy amplification, message encryption, Qiskit circuit simulation, Qiskit Aer noise models, and selected IBM Quantum hardware runs.
 
-The project is designed as an exploration of how quantum information principles can support secure communication and how QBER changes under clean, noisy, attacked, and combined channel conditions.
+The project is designed to connect quantum information, cryptography, probability, computer science, and interactive visualization in one coherent system. It begins with a basic BB84 simulator and develops into a broader BB84 analysis platform with experiments, graphs, notebooks, and a deployed Streamlit dashboard.
 
 ## 1. Motivation
 
-Modern digital communication depends on cryptographic systems for confidentiality and trust. Future large-scale quantum computers may weaken some widely used public-key systems, which makes quantum-safe communication an important area of study.
+Modern secure communication depends on reliable key exchange. Many widely used public-key cryptographic systems may face future threats from large-scale quantum computers, making quantum-safe communication an important area of study.
 
-This project focuses on BB84, one of the earliest and most important quantum key distribution protocols. The goal is to understand how quantum states can be used to generate shared keys, how eavesdropping creates detectable disturbance, and how additional steps such as error correction and privacy amplification are needed before using the generated key.
+BB84 is one of the earliest and most important quantum key distribution protocols. It demonstrates how quantum measurement can be used not only to generate shared keys, but also to detect disturbance caused by eavesdropping.
+
+The goal of this project is to understand BB84 by building it from the ground up:
+
+```text
+basic key generation
+→ eavesdropping simulation
+→ QBER analysis
+→ error correction
+→ privacy amplification
+→ message encryption
+→ noisy simulation
+→ hardware-backed experiments
+```
+
+Rather than only reading about BB84 conceptually, this project implements the protocol, runs experiments, visualizes results, and connects the protocol-level model to Qiskit circuits and IBM Quantum hardware.
 
 ## 2. Background
 
 ### 2.1 Quantum Key Distribution
 
-Quantum Key Distribution allows two parties to generate a shared key using quantum states and classical communication. BB84 uses two measurement bases:
+Quantum Key Distribution allows two parties, usually called Alice and Bob, to generate a shared secret key using quantum states and classical communication.
 
-- Z basis: computational basis
-- X basis: diagonal basis
+In BB84, Alice randomly prepares bits using one of two bases:
 
-Alice randomly chooses bits and bases. Bob independently chooses measurement bases. After transmission, they publicly compare bases and keep only the positions where their bases matched.
+- Z basis
+- X basis
 
-### 2.2 Quantum Bit Error Rate
+Bob independently chooses measurement bases. After transmission, Alice and Bob publicly compare only their bases, not their secret bit values. They keep the positions where their bases matched and discard the rest. The remaining bits form the sifted key.
 
-The Quantum Bit Error Rate measures the fraction of mismatched bits between Alice and Bob's sifted keys.
+### 2.2 BB84 Basis Behavior
 
-A high QBER can indicate:
+The core BB84 rule is:
 
-- eavesdropping
-- channel noise
-- imperfect transmission
-- measurement disturbance
+```text
+same basis → Bob recovers Alice's bit
+different basis → Bob receives an approximately random result
+```
 
-In this project, QBER is used as the central metric for deciding whether communication should continue or abort.
+This rule is simulated directly in the protocol-level BB84 model and later validated using Qiskit circuits.
 
-### 2.3 Intercept-Resend Attack
+### 2.3 Quantum Bit Error Rate
 
-The intercept-resend attack is a simple eavesdropping strategy. Eve intercepts some transmitted qubits, measures them using randomly selected bases, and resends the measured result to Bob.
+The Quantum Bit Error Rate is the fraction of mismatched bits between Alice and Bob's sifted keys.
 
-Because Eve does not always choose the correct basis, her measurement can disturb the state. This disturbance increases QBER.
+```text
+QBER = mismatched sifted bits / total compared sifted bits
+```
 
-For an intercept-resend attack, the expected approximate relationship is:
+QBER is important because it indicates whether the channel is clean, noisy, or possibly disturbed by eavesdropping.
+
+A high QBER can be caused by:
+
+- Eve's intercept-resend attack
+- normal channel noise
+- imperfect quantum gates
+- measurement error
+- hardware noise
+- a combination of these factors
+
+### 2.4 Eve's Intercept-Resend Attack
+
+In the intercept-resend attack, Eve intercepts some transmitted qubits, measures them using randomly selected bases, and resends her measured result to Bob.
+
+If Eve chooses the wrong basis, she can disturb the state. This disturbance creates mismatches between Alice and Bob's sifted keys.
+
+For a simple intercept-resend attack, the expected approximate relationship is:
 
 ```text
 QBER ≈ Eve interception probability × 25%
 ```
 
-### 2.4 Error Correction
+### 2.5 Error Correction
 
-Even when QBER is below the selected threshold, Alice and Bob's sifted keys may still contain mismatched bits. This project implements a parity-based correction method to reduce mismatches before encryption.
+Even when QBER is below the selected threshold, Alice and Bob's sifted keys may still contain mismatches. If these mismatches remain, message decryption may fail.
 
-The correction method uses:
+This project implements a parity-based error correction method that uses:
 
 - block parity checks
-- binary parity search for likely error positions
-- multiple shuffled passes
+- binary parity search
+- multiple shuffled correction passes
 - final mismatch tracking
 
-### 2.5 Privacy Amplification
+The goal is to reduce or eliminate mismatches before the key is used.
 
-After error correction, the reconciled key is compressed into a shorter final key. This project uses a SHAKE-256 based key derivation step for privacy amplification and final key generation.
+### 2.6 Privacy Amplification
 
-The current pipeline is:
+After error correction, the reconciled key is compressed into a shorter final key using a SHAKE-256 based derivation step.
+
+This project uses privacy amplification to model the final key derivation stage of a BB84-style communication pipeline.
+
+The simplified key-processing pipeline is:
 
 ```text
-Raw BB84 key
+raw sifted key
 → error correction
 → privacy amplification
-→ final key
+→ final derived key
 ```
 
-### 2.6 Channel Noise
+### 2.7 Channel and Hardware Noise
 
-Real communication channels may introduce errors even when no attacker is present. This project includes a simple bit-flip channel noise model so that QBER can be studied under clean, noisy, attacked, and combined scenarios.
+Real communication systems are not perfect. Errors can appear even when there is no eavesdropper.
+
+This project studies noise in three layers:
+
+1. Protocol-level channel noise
+2. Qiskit Aer circuit-level noise
+3. IBM Quantum hardware noise
+
+This makes it possible to compare ideal behavior, noisy simulation, and real-device results.
 
 ## 3. System Design
 
 The project is organized into separate modules:
 
 ```text
-src/bb84.py                  BB84 simulation and channel noise model
-src/encryption.py            Message encryption and full exchange pipeline
-src/error_correction.py      Parity-based correction
-src/privacy_amplification.py Final key derivation
-src/experiments.py           QBER experiments
-src/qiskit_bb84.py           Qiskit circuit-based BB84 demo
-app.py                       Streamlit dashboard
+src/bb84.py                              BB84 simulation and channel noise model
+src/encryption.py                        Full message exchange pipeline
+src/error_correction.py                  Parity-based error correction
+src/error_correction_experiments.py      Error correction parameter sweep
+src/privacy_amplification.py             Final key derivation
+src/privacy_amplification_experiments.py Privacy amplification parameter sweep
+src/experiments.py                       QBER and noise experiments
+src/qiskit_bb84.py                       Qiskit BB84 circuit demo
+src/qiskit_noise.py                      Qiskit Aer noise model experiment
+src/ibm_hardware.py                      IBM Quantum hardware integration
+app.py                                   Streamlit dashboard
 ```
 
-The full communication pipeline is:
+The main communication pipeline is:
 
 ```text
 Alice bit and basis generation
@@ -99,181 +149,335 @@ Alice bit and basis generation
 → channel noise model
 → basis sifting
 → QBER calculation
-→ parity-based correction
+→ parity-based error correction
 → privacy amplification
+→ final key derivation
 → message encryption/decryption
+```
+
+The circuit and hardware layer is:
+
+```text
+BB84 circuit construction
+→ ideal Qiskit simulation
+→ Qiskit Aer noisy simulation
+→ IBM Quantum hardware run
+→ circuit-level result comparison
 ```
 
 ## 4. Implementation
 
-### 4.1 BB84 Protocol Simulation
+### 4.1 Protocol-Level BB84 Simulation
 
-The protocol-level simulator follows the core BB84 rule:
+The protocol-level simulator generates Alice's random bits and bases, Bob's random bases, and Bob's measurement outcomes.
 
-```text
-same basis → Bob gets Alice's bit
-different basis → Bob gets a random bit
-```
+When Alice and Bob use the same basis, Bob receives Alice's bit. When their bases differ, Bob's result is random.
 
-This allows the project to simulate large numbers of qubits efficiently and study QBER trends across repeated trials.
+This model allows the project to efficiently simulate thousands of BB84 transmissions and run repeated experiments.
 
 ### 4.2 Eve Attack Model
 
-Eve intercepts each qubit with a configurable probability. When she intercepts, she randomly chooses a basis, measures the qubit, and resends her result to Bob.
+The Eve model uses an intercept-resend attack. Eve intercepts each qubit with a selected probability. When she intercepts, she chooses a random basis, measures the qubit, and resends the measured result to Bob.
 
 This allows the project to study how increasing Eve's interception probability affects QBER.
 
 ### 4.3 Channel Noise Model
 
-The channel noise model flips transmitted bits with a configurable probability. This creates errors even when Eve is absent.
+The channel noise model flips transmitted bits with a selected probability. This creates errors even when Eve is absent.
 
-This makes it possible to compare:
+The noise model allows the project to compare:
 
-- clean communication
-- noise-only communication
-- Eve-only communication
-- Eve plus channel noise
+- clean channel behavior
+- noise-only behavior
+- Eve-only behavior
+- Eve plus noise behavior
 
 ### 4.4 Message Encryption
 
-After a final key is derived, the project converts the input message into bits and encrypts it using XOR-based bit encryption. Bob decrypts using his derived key.
+After BB84 key generation, QBER checking, correction, and privacy amplification, the final derived key is used to encrypt a message.
 
-This demonstrates how a BB84-generated key can be connected to message transmission after QBER checks, correction, and final key derivation.
+The project uses XOR-based bit encryption to demonstrate how a generated key can be applied to message transmission. The purpose is to connect BB84 key generation to a complete communication flow.
 
-### 4.5 Qiskit Circuit Demonstration
+### 4.5 Error Correction
 
-The Qiskit notebook prepares the four BB84 states:
+The parity-based error correction step divides the key into blocks and compares parities. If a parity mismatch is detected, a binary parity search is used to locate a likely error position, and Bob's bit is flipped.
+
+This process is repeated across several shuffled passes.
+
+The module tracks:
+
+- raw mismatches
+- final mismatches
+- corrections applied
+- parity checks
+- correction success
+
+### 4.6 Privacy Amplification
+
+The privacy amplification module converts reconciled key bits into bytes and uses SHAKE-256 to derive a final key of the required length.
+
+The project also tracks the effect of compression ratio on final key capacity and message success.
+
+### 4.7 Qiskit Circuit Demonstration
+
+The Qiskit BB84 module creates one-qubit BB84 circuits for the four BB84 states:
 
 - bit 0 in Z basis: |0>
 - bit 1 in Z basis: |1>
 - bit 0 in X basis: |+>
 - bit 1 in X basis: |->
 
-Bob then measures in either the Z or X basis. The circuit results confirm that same-basis measurements are deterministic while different-basis measurements are approximately random.
+Bob then measures in either the Z or X basis. The results confirm the same-basis and different-basis behavior used in the protocol simulator.
+
+### 4.8 Qiskit Aer Noise Models
+
+The Qiskit Aer noise module adds circuit-level noise using depolarizing gate noise and readout error.
+
+This experiment compares ideal BB84 circuits with noisy BB84 circuits and shows how circuit noise increases wrong measurement probability.
+
+### 4.9 IBM Quantum Hardware Demonstration
+
+The IBM Quantum hardware module runs selected BB84 circuits on real IBM Quantum hardware.
+
+The hardware demo includes:
+
+- backend selection
+- circuit transpilation
+- IBM Runtime integration
+- selected BB84 circuit execution
+- result collection
+- hardware comparison graph
+
+This connects the project to real quantum devices and shows how real hardware differs from ideal simulation.
+
+### 4.10 Streamlit Dashboard
+
+The Streamlit dashboard provides an interactive interface for running the BB84 communication pipeline.
+
+The dashboard includes:
+
+- live protocol simulation
+- QBER experiment graphs
+- circuit and hardware graphs
+- key-processing experiment graphs
+- technical notes
+
+The dashboard is organized into tabs so users can explore the project without scrolling through every result at once.
 
 ## 5. Experiments
 
 ### 5.1 QBER vs Eve Interception
 
-The first experiment varies Eve's interception probability from 0% to 100% and measures average QBER across repeated trials.
+This experiment varies Eve's interception probability from 0% to 100% and measures the average QBER across repeated trials.
 
-The result follows the expected approximate relationship:
+The simulation follows the expected approximate relationship:
 
 ```text
 QBER ≈ Eve interception probability × 25%
 ```
 
-### 5.2 Qiskit Basis Demonstration
+### 5.2 Qiskit BB84 Basis Demonstration
 
-The Qiskit experiment runs all BB84 bit and basis combinations. It confirms:
+This experiment runs all combinations of Alice bit, Alice basis, and Bob basis.
+
+The result confirms:
 
 ```text
 same basis → deterministic result
 different basis → approximately random result
 ```
 
-This validates the simplified protocol-level rule used in the main simulator.
+### 5.3 Message Encryption Demo
 
-### 5.3 Error Correction Demonstration
+This experiment connects BB84 key generation to message encryption.
 
-The error correction notebook shows that low QBER does not always mean Alice and Bob's keys are already identical. The parity-based correction step reduces raw mismatches and prepares the key for final derivation.
+The system checks QBER, applies key processing, derives a final key, encrypts the message, and attempts to decrypt it with Bob's key.
 
-### 5.4 Privacy Amplification Demonstration
+If the channel is too noisy or the key material is insufficient, communication is aborted.
 
-The privacy amplification notebook shows how the reconciled key can be compressed into a shorter final key using SHAKE-256 based derivation. The final key is then used for message encryption.
+### 5.4 Error Correction Demonstration
 
-### 5.5 Channel Noise Experiment
+This experiment shows why correction is needed when QBER is low but nonzero.
 
-The channel noise experiment varies the noise probability and measures how QBER changes when Eve is absent. As the noise probability increases, QBER also increases.
+Even a small mismatch rate can cause decryption failure. The parity-based correction step reduces mismatches before privacy amplification.
 
-### 5.6 Eve vs Channel Noise Comparison
+### 5.5 Privacy Amplification Demonstration
 
-The comparison experiment studies four scenarios:
+This experiment shows how the reconciled key is compressed into a final derived key.
+
+The derived key is then used for message encryption and decryption.
+
+### 5.6 Channel Noise Experiment
+
+This experiment varies channel noise probability while Eve is absent.
+
+As channel noise increases, QBER also increases. This shows that errors can arise even without an attacker.
+
+### 5.7 Eve vs Channel Noise Comparison
+
+This experiment compares four scenarios:
 
 1. Clean channel
 2. Noise only
 3. Eve only
 4. Eve + noise
 
-This helps separate errors caused by ordinary channel noise from errors caused by eavesdropping.
+The result shows that QBER can be caused by Eve, noise, or both.
+
+### 5.8 Qiskit Aer Noise Experiment
+
+This experiment compares ideal BB84 circuits with noisy Qiskit Aer circuits.
+
+As gate and readout noise increase, the probability of a wrong measurement increases.
+
+### 5.9 IBM Quantum Hardware Experiment
+
+This experiment runs selected BB84 circuits on IBM Quantum hardware.
+
+Same-basis circuits should mostly recover Alice's bit. Different-basis circuits should be closer to random. Real hardware introduces deviations from ideal simulation.
+
+### 5.10 Error Correction Parameter Sweep
+
+This experiment varies:
+
+- block size
+- correction passes
+
+It measures:
+
+- success rate
+- average raw mismatches
+- average final mismatches
+- corrections applied
+- parity checks
+
+The goal is to understand the tradeoff between correction reliability and correction cost.
+
+### 5.11 Privacy Amplification Parameter Sweep
+
+This experiment varies:
+
+- privacy compression ratio
+- message length
+
+It measures:
+
+- message success rate
+- final key capacity
+- insufficient-key failures
+- QBER failures
+- mismatch failures
+
+The goal is to understand the tradeoff between compression strength and usable key material.
 
 ## 6. Results
 
-The project produces several important results.
-
 ### 6.1 Eavesdropping Increases QBER
 
-The intercept-resend model shows that QBER rises as Eve intercepts more qubits. This supports the central BB84 idea that measurement disturbance can reveal eavesdropping.
+The intercept-resend model shows that QBER rises as Eve intercepts more qubits.
 
-### 6.2 QBER Alone Does Not Identify the Cause
+This supports the central BB84 idea that measurement disturbance can reveal possible eavesdropping.
 
-Channel noise can also raise QBER. The Eve-vs-noise comparison shows that a high QBER indicates a problem, but not necessarily whether the problem is an attacker, noise, or both.
+### 6.2 Channel Noise Also Increases QBER
 
-### 6.3 Error Correction Is Needed Before Encryption
+The channel noise experiment shows that QBER can increase even when Eve is absent.
 
-When QBER is low but nonzero, Alice and Bob may still have mismatched raw keys. The correction step reduces these mismatches before privacy amplification and encryption.
+This means QBER is not only an eavesdropping signal. It is also affected by transmission noise.
 
-### 6.4 Privacy Amplification Completes the Key Pipeline
+### 6.3 QBER Is a Warning Signal, Not a Complete Diagnosis
 
-The final key derivation step compresses the reconciled key before encryption. This makes the simulation pipeline more complete and closer to the structure of a BB84-style communication workflow.
+The Eve-vs-noise comparison shows that QBER can be caused by eavesdropping, noise, or both.
 
-### 6.5 Qiskit Connects the Protocol to Quantum Circuits
+A high QBER tells Alice and Bob that the channel is disturbed, but it does not identify the exact cause of the disturbance.
 
-The Qiskit demonstration shows that the simplified simulation rule is grounded in actual one-qubit circuit behavior.
+### 6.4 Qiskit Confirms the Basis Behavior
+
+The Qiskit circuit demonstration confirms that same-basis measurements recover Alice's bit while different-basis measurements are approximately random.
+
+This validates the simplified rule used in the protocol-level simulator.
+
+### 6.5 Qiskit Aer Connects Protocol Noise to Circuit Noise
+
+The Qiskit Aer noise experiment shows that circuit-level gate and readout noise can increase wrong measurement probability.
+
+This connects the protocol-level bit-flip model to noisy quantum circuit simulation.
+
+### 6.6 IBM Hardware Shows Real Device Imperfections
+
+The IBM Quantum hardware demonstration shows that real quantum devices deviate from ideal simulation.
+
+This adds a practical hardware-backed layer to the project.
+
+### 6.7 Error Correction Has a Reliability-Cost Tradeoff
+
+The error correction parameter sweep shows that increasing correction passes can improve success rate, but also increases the number of parity checks.
+
+This demonstrates the tradeoff between reliability and communication cost.
+
+### 6.8 Privacy Amplification Has a Compression-Capacity Tradeoff
+
+The privacy amplification parameter sweep shows that stronger compression reduces final key length, while weaker compression preserves more usable key capacity.
+
+This demonstrates a tradeoff between compression and message capacity.
 
 ## 7. Dashboard
 
-The Streamlit dashboard allows users to adjust:
+The dashboard is organized into five sections:
+
+1. Live Simulation
+2. QBER Experiments
+3. Circuit + Hardware
+4. Key Processing
+5. Technical Notes
+
+The live simulation allows users to control:
 
 - number of BB84 qubits
 - Eve interception probability
 - channel noise probability
 - QBER threshold
-- error-correction settings
+- error correction settings
 - privacy amplification settings
 - message input
 
-The dashboard displays:
+The saved experiment tabs display graphs generated from notebooks.
 
-- communication status
-- QBER
-- key lengths
-- raw and final mismatches
-- correction metrics
-- final key fingerprint
-- ciphertext and decrypted message
-- QBER experiment graphs
-
-The deployed dashboard makes the project easier to explore without running the notebooks manually.
+IBM Quantum hardware jobs are run from notebooks, not from the public dashboard.
 
 ## 8. Limitations
 
-The current project is a simulation. Important limitations include:
+This project is a simulation and analysis platform. Important limitations include:
 
-- no real quantum hardware channel
-- simple bit-flip channel noise model
-- parity-based correction rather than a full production reconciliation protocol
+- no real-time quantum hardware execution from the dashboard
+- simplified protocol-level channel noise
+- parity-based correction rather than a production reconciliation protocol
 - XOR-based message encryption for demonstration
 - no full authentication layer
-- no deployment of real cryptographic key management
-- no hardware noise calibration
+- no real-world key management system
+- limited hardware experiments
+- no comparison with entanglement-based QKD yet
 
-These limitations are useful future directions rather than flaws in the current learning-focused design.
+These limitations are natural future directions for the project.
 
 ## 9. Future Work
 
-Possible next steps include:
+Possible future improvements include:
 
-- stronger error-correction experiments
-- Qiskit Aer noise models
-- IBM Quantum hardware runs
-- comparison with entanglement-based QKD
-- AES-based message encryption demo
-- a blog series explaining the full BB84 pipeline
-- expanded dashboard controls for experiment generation
+- final v2.0 repository polish
+- stronger dashboard result summaries
+- Qiskit Aer noise model expansion
+- more IBM hardware runs
+- comparison with E91 entanglement-based QKD
+- BB84 vs E91 comparison
+- expanded attack models
+- stronger reconciliation experiments
+- deeper privacy amplification analysis
+- public technical articles after the project is complete
 
 ## 10. Conclusion
 
-Quantum-Safe Communication Explorer demonstrates the BB84 communication pipeline through simulation, experiments, circuit validation, and interactive visualization.
+Quantum-Safe Communication Explorer demonstrates a BB84-inspired quantum-safe communication pipeline through simulation, experiments, visualization, Qiskit circuits, Qiskit Aer noise models, and IBM Quantum hardware runs.
 
-By combining BB84 key generation, Eve attack modeling, QBER analysis, parity-based correction, privacy amplification, channel noise, Qiskit circuits, and dashboard deployment, the project connects quantum information and cryptography in one coherent system.
+The project shows how eavesdropping and noise affect QBER, why error correction and privacy amplification are needed, how circuit-level and hardware-level noise differ from ideal behavior, and how a generated key can be used for message encryption.
+
+By combining quantum information, cryptography, probability, Python programming, Qiskit, IBM Quantum hardware, and Streamlit deployment, the project forms a complete research-style exploration of BB84 quantum key distribution.

@@ -27,6 +27,8 @@ Try the interactive dashboard here:
 * Research-style project report
 * Error correction parameter sweep
 * Privacy amplification parameter sweep
+* Organized dashboard experiment tabs
+* Final results summary
 
 ## Project Architecture
 
@@ -152,6 +154,7 @@ quantum-safe-communication-explorer/
 ├── figures/
 ├── results/
 └── docs/
+    ├── final_results_summary.md
     └── project_report.md
 ```
 
@@ -269,40 +272,29 @@ figures/privacy_amplification_key_capacity.png
 * v1.5: Added IBM Quantum hardware demonstration
 * v1.6: Added error correction parameter sweep
 * v1.7: Added privacy amplification parameter sweep
+* v1.8: Organized dashboard and added final results summary
 
-## Version 1.7: Privacy Amplification Parameter Sweep
+## Version 1.8: Dashboard and Documentation Cleanup
 
-This version adds a parameter sweep for the privacy amplification step.
+This version improves the dashboard organization and adds a concise final results summary.
 
-Earlier versions added privacy amplification as part of the BB84 communication pipeline. This version studies how different compression ratios affect final key capacity and message transmission success.
+### New Updates
 
-### New Features
-
-- Added privacy amplification experiment module
-- Added compression-ratio sweep
-- Added message-length sweep
-- Added final key capacity measurement
-- Added success-rate tracking
-- Added insufficient-key failure tracking
-- Added privacy amplification sweep notebook
-- Added success-rate and key-capacity graphs
-- Added graphs to the Streamlit dashboard
-
-### Key Result
-
-The project now studies the compression-capacity tradeoff in privacy amplification. Stronger compression reduces final key length, while weaker compression preserves more usable key material for encryption.
+- Organized dashboard sections into tabs
+- Grouped QBER experiment graphs
+- Grouped circuit and hardware results
+- Grouped key-processing experiments
+- Added concise technical notes section
+- Added final results summary document
+- Updated README and project report for the current pipeline
 
 ### Output Files
 
-- src/privacy_amplification_experiments.py
-- notebooks/13_privacy_amplification_parameter_sweep.ipynb
-- results/privacy_amplification_parameter_sweep.csv
-- figures/privacy_amplification_success_rate.png
-- figures/privacy_amplification_key_capacity.png
+- docs/final_results_summary.md
 
 ### Next Step
 
-The next version may focus on dashboard/report cleanup before preparing a final v2.0 release.
+The next version will prepare the final v2.0 release with updated documentation, rerun notebooks, verified graphs, and final repository cleanup.
 
 ## Notes
 
