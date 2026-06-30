@@ -369,6 +369,32 @@ else:
     )
 
 st.markdown("---")
+st.subheader("Privacy Amplification Parameter Sweep")
+
+privacy_success_path = PROJECT_ROOT / "figures" / "privacy_amplification_success_rate.png"
+privacy_capacity_path = PROJECT_ROOT / "figures" / "privacy_amplification_key_capacity.png"
+
+if privacy_success_path.exists():
+    st.image(
+        str(privacy_success_path),
+        caption="Message success rate across privacy compression ratios and message lengths."
+    )
+else:
+    st.warning(
+        "Privacy amplification success-rate graph not found. Run the v1.7 privacy amplification sweep notebook to generate it."
+    )
+
+if privacy_capacity_path.exists():
+    st.image(
+        str(privacy_capacity_path),
+        caption="Final key capacity compared with message bit requirements."
+    )
+else:
+    st.warning(
+        "Privacy amplification key-capacity graph not found. Run the v1.7 privacy amplification sweep notebook to generate it."
+    )
+
+st.markdown("---")
 st.subheader("Security Note")
 
 with st.expander("Technical assumptions"):

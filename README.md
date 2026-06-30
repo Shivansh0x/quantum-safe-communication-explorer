@@ -26,6 +26,7 @@ Try the interactive dashboard here:
 * Streamlit interactive dashboard
 * Research-style project report
 * Error correction parameter sweep
+* Privacy amplification parameter sweep
 
 ## Project Architecture
 
@@ -108,9 +109,9 @@ After that, the IBM hardware notebook can load the saved account automatically.
 
 ## Project Status
 
-Current version: **v1.6**
+Current version: **v1.7**
 
-The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, error correction parameter sweeps, message encryption, project documentation, and a live deployed dashboard.
+The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, error correction parameter sweeps, privacy amplification parameter sweeps, message encryption, project documentation, and a live deployed dashboard.
 
 ## Repository Structure
 
@@ -129,6 +130,7 @@ quantum-safe-communication-explorer/
 │   ├── experiments.py
 │   ├── ibm_hardware.py
 │   ├── privacy_amplification.py
+│   ├── privacy_amplification_experiments.py
 │   ├── qiskit_bb84.py
 │   └── qiskit_noise.py
 │
@@ -144,7 +146,8 @@ quantum-safe-communication-explorer/
 │   ├── 09_eve_noise_comparison.ipynb
 │   ├── 10_qiskit_noise_models.ipynb
 │   ├── 11_ibm_hardware_demo.ipynb
-│   └── 12_error_correction_parameter_sweep.ipynb
+│   ├── 12_error_correction_parameter_sweep.ipynb
+│   └── 13_privacy_amplification_parameter_sweep.ipynb
 │
 ├── figures/
 ├── results/
@@ -216,6 +219,10 @@ The IBM Quantum hardware demonstration runs selected BB84 circuits on real quant
 
 The error correction parameter sweep shows how block size and correction passes affect correction success rate and parity-check cost. More passes can improve reliability, but they also require more parity checks.
 
+### 9. Privacy Amplification Has a Compression-Capacity Tradeoff
+
+The privacy amplification parameter sweep shows how compression ratio affects usable final key length and message transmission success. Stronger compression reduces the amount of final key material available for encryption, while weaker compression preserves more usable key length.
+
 ## Output Files
 
 Important generated outputs include:
@@ -228,6 +235,7 @@ results/qiskit_bb84_basis_results.csv
 results/qiskit_noise_results.csv
 results/ibm_hardware_results.csv
 results/error_correction_parameter_sweep.csv
+results/privacy_amplification_parameter_sweep.csv
 
 figures/qber_vs_eve_interception.png
 figures/qber_vs_channel_noise.png
@@ -237,6 +245,8 @@ figures/qiskit_noise_comparison.png
 figures/ibm_hardware_comparison.png
 figures/error_correction_success_rate.png
 figures/error_correction_parity_checks.png
+figures/privacy_amplification_success_rate.png
+figures/privacy_amplification_key_capacity.png
 ```
 
 ## Version History
@@ -258,40 +268,41 @@ figures/error_correction_parity_checks.png
 * v1.4: Added Qiskit Aer noise model experiment
 * v1.5: Added IBM Quantum hardware demonstration
 * v1.6: Added error correction parameter sweep
+* v1.7: Added privacy amplification parameter sweep
 
-## Version 1.6: Error Correction Parameter Sweep
+## Version 1.7: Privacy Amplification Parameter Sweep
 
-This version adds a parameter sweep for the parity-based error correction step.
+This version adds a parameter sweep for the privacy amplification step.
 
-Earlier versions added error correction as part of the BB84 communication pipeline. This version studies how the correction method behaves under different block sizes and numbers of correction passes.
+Earlier versions added privacy amplification as part of the BB84 communication pipeline. This version studies how different compression ratios affect final key capacity and message transmission success.
 
 ### New Features
 
-- Added error correction experiment module
-- Added block-size sweep
-- Added correction-pass sweep
-- Added success-rate measurement
-- Added final mismatch tracking
-- Added parity-check cost analysis
-- Added error correction sweep notebook
-- Added success-rate and parity-check graphs
+- Added privacy amplification experiment module
+- Added compression-ratio sweep
+- Added message-length sweep
+- Added final key capacity measurement
+- Added success-rate tracking
+- Added insufficient-key failure tracking
+- Added privacy amplification sweep notebook
+- Added success-rate and key-capacity graphs
 - Added graphs to the Streamlit dashboard
 
 ### Key Result
 
-The project now studies the reliability-cost tradeoff in parity-based error correction. More correction passes can improve the chance of producing matching keys, but they also require more parity checks.
+The project now studies the compression-capacity tradeoff in privacy amplification. Stronger compression reduces final key length, while weaker compression preserves more usable key material for encryption.
 
 ### Output Files
 
-- src/error_correction_experiments.py
-- notebooks/12_error_correction_parameter_sweep.ipynb
-- results/error_correction_parameter_sweep.csv
-- figures/error_correction_success_rate.png
-- figures/error_correction_parity_checks.png
+- src/privacy_amplification_experiments.py
+- notebooks/13_privacy_amplification_parameter_sweep.ipynb
+- results/privacy_amplification_parameter_sweep.csv
+- figures/privacy_amplification_success_rate.png
+- figures/privacy_amplification_key_capacity.png
 
 ### Next Step
 
-The next version may add privacy amplification parameter experiments to study the tradeoff between compression ratio and usable final key length.
+The next version may focus on dashboard/report cleanup before preparing a final v2.0 release.
 
 ## Notes
 
