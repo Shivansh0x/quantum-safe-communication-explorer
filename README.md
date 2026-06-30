@@ -25,6 +25,7 @@ Try the interactive dashboard here:
 * IBM Quantum hardware demonstration
 * Streamlit interactive dashboard
 * Research-style project report
+* Error correction parameter sweep
 
 ## Project Architecture
 
@@ -107,9 +108,9 @@ After that, the IBM hardware notebook can load the saved account automatically.
 
 ## Project Status
 
-Current version: **v1.5**
+Current version: **v1.6**
 
-The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, message encryption, project documentation, and a live deployed dashboard.
+The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, error correction parameter sweeps, message encryption, project documentation, and a live deployed dashboard.
 
 ## Repository Structure
 
@@ -124,6 +125,7 @@ quantum-safe-communication-explorer/
 │   ├── bb84.py
 │   ├── encryption.py
 │   ├── error_correction.py
+│   ├── error_correction_experiments.py
 │   ├── experiments.py
 │   ├── ibm_hardware.py
 │   ├── privacy_amplification.py
@@ -141,7 +143,8 @@ quantum-safe-communication-explorer/
 │   ├── 08_channel_noise_demo.ipynb
 │   ├── 09_eve_noise_comparison.ipynb
 │   ├── 10_qiskit_noise_models.ipynb
-│   └── 11_ibm_hardware_demo.ipynb
+│   ├── 11_ibm_hardware_demo.ipynb
+│   └── 12_error_correction_parameter_sweep.ipynb
 │
 ├── figures/
 ├── results/
@@ -209,6 +212,10 @@ The Qiskit Aer noise experiment compares ideal BB84 circuits with noisy circuit 
 
 The IBM Quantum hardware demonstration runs selected BB84 circuits on real quantum hardware. Same-basis circuits should mostly recover Alice's bit, while different-basis circuits should be closer to random. Real-device noise can cause deviations from ideal simulation.
 
+### 8. Error Correction Has a Reliability-Cost Tradeoff
+
+The error correction parameter sweep shows how block size and correction passes affect correction success rate and parity-check cost. More passes can improve reliability, but they also require more parity checks.
+
 ## Output Files
 
 Important generated outputs include:
@@ -220,6 +227,7 @@ results/eve_noise_comparison_results.csv
 results/qiskit_bb84_basis_results.csv
 results/qiskit_noise_results.csv
 results/ibm_hardware_results.csv
+results/error_correction_parameter_sweep.csv
 
 figures/qber_vs_eve_interception.png
 figures/qber_vs_channel_noise.png
@@ -227,6 +235,8 @@ figures/eve_noise_comparison_qber.png
 figures/qiskit_bb84_basis_results.png
 figures/qiskit_noise_comparison.png
 figures/ibm_hardware_comparison.png
+figures/error_correction_success_rate.png
+figures/error_correction_parity_checks.png
 ```
 
 ## Version History
@@ -247,37 +257,41 @@ figures/ibm_hardware_comparison.png
 * v1.3: Refreshed README and project report for the full v1.2 pipeline
 * v1.4: Added Qiskit Aer noise model experiment
 * v1.5: Added IBM Quantum hardware demonstration
+* v1.6: Added error correction parameter sweep
 
-## Version 1.5: IBM Quantum Hardware Demo
+## Version 1.6: Error Correction Parameter Sweep
 
-This version adds a small IBM Quantum hardware demonstration for selected BB84 circuits.
+This version adds a parameter sweep for the parity-based error correction step.
 
-Earlier versions compared ideal simulation, protocol-level noise, and Qiskit Aer circuit-level noise. This version runs selected BB84 circuit cases on real IBM Quantum hardware and compares the observed measurement behavior with the expected BB84 outcomes.
+Earlier versions added error correction as part of the BB84 communication pipeline. This version studies how the correction method behaves under different block sizes and numbers of correction passes.
 
 ### New Features
 
-* Added IBM Quantum Runtime integration
-* Added hardware backend selection
-* Added circuit transpilation for IBM Quantum hardware
-* Added selected BB84 hardware runs
-* Added hardware result CSV
-* Added hardware comparison graph
-* Added hardware result display to the Streamlit dashboard
+- Added error correction experiment module
+- Added block-size sweep
+- Added correction-pass sweep
+- Added success-rate measurement
+- Added final mismatch tracking
+- Added parity-check cost analysis
+- Added error correction sweep notebook
+- Added success-rate and parity-check graphs
+- Added graphs to the Streamlit dashboard
 
 ### Key Result
 
-The project now includes a real quantum hardware experiment. Same-basis BB84 circuits should mostly recover Alice's bit, while different-basis circuits should be closer to random, with real-device noise causing deviations from ideal behavior.
+The project now studies the reliability-cost tradeoff in parity-based error correction. More correction passes can improve the chance of producing matching keys, but they also require more parity checks.
 
 ### Output Files
 
-* src/ibm_hardware.py
-* notebooks/11_ibm_hardware_demo.ipynb
-* results/ibm_hardware_results.csv
-* figures/ibm_hardware_comparison.png
+- src/error_correction_experiments.py
+- notebooks/12_error_correction_parameter_sweep.ipynb
+- results/error_correction_parameter_sweep.csv
+- figures/error_correction_success_rate.png
+- figures/error_correction_parity_checks.png
 
 ### Next Step
 
-The next version may add parameter sweeps for error correction or privacy amplification.
+The next version may add privacy amplification parameter experiments to study the tradeoff between compression ratio and usable final key length.
 
 ## Notes
 

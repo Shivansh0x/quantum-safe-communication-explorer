@@ -343,6 +343,32 @@ else:
     )
 
 st.markdown("---")
+st.subheader("Error Correction Parameter Sweep")
+
+error_correction_success_path = PROJECT_ROOT / "figures" / "error_correction_success_rate.png"
+error_correction_cost_path = PROJECT_ROOT / "figures" / "error_correction_parity_checks.png"
+
+if error_correction_success_path.exists():
+    st.image(
+        str(error_correction_success_path),
+        caption="Success rate of parity-based error correction across block sizes and correction passes."
+    )
+else:
+    st.warning(
+        "Error correction success-rate graph not found. Run the v1.6 error-correction sweep notebook to generate it."
+    )
+
+if error_correction_cost_path.exists():
+    st.image(
+        str(error_correction_cost_path),
+        caption="Average number of parity checks required across block sizes and correction passes."
+    )
+else:
+    st.warning(
+        "Error correction parity-check graph not found. Run the v1.6 error-correction sweep notebook to generate it."
+    )
+
+st.markdown("---")
 st.subheader("Security Note")
 
 with st.expander("Technical assumptions"):
