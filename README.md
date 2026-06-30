@@ -70,12 +70,6 @@ Run notebooks:
 jupyter notebook
 ```
 
-## Project Status
-
-Current version: **v1.3**
-
-The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, message encryption, Qiskit circuit demonstrations, project documentation, and a live deployed dashboard.
-
 ## Repository Structure
 
 ```text
@@ -191,26 +185,36 @@ figures/qiskit_bb84_basis_results.png
 - v1.1: Added channel noise simulation and QBER analysis
 - v1.2: Added Eve vs channel noise comparison experiment
 - v1.3: Refreshed README and project report for the full v1.2 pipeline
+- v1.4: Added Qiskit Aer noise model experiment
 
-## Version 1.3: Documentation Refresh
+## Version 1.4: Qiskit Aer Noise Models
 
-This version updates the README and project report so they reflect the current full project pipeline.
+This version adds a circuit-level noise experiment using Qiskit Aer.
 
-### New Updates
+Earlier versions modeled channel noise at the protocol level using a simple bit-flip probability. This version compares ideal and noisy BB84 circuits using Qiskit Aer noise models with gate and readout errors.
 
-- Rewrote the README for clarity and readability
-- Updated the project architecture
-- Added current pipeline description
-- Added updated key results
-- Added current repository structure
-- Updated project report to include error correction, privacy amplification, channel noise, and Eve-vs-noise comparison
-- Reduced repetitive warning language while keeping technical assumptions clear
+### New Features
+
+- Added Qiskit Aer noise model module
+- Added depolarizing gate noise simulation
+- Added readout error simulation
+- Added ideal vs noisy BB84 circuit comparison
+- Added Qiskit noise sweep notebook
+- Added noise comparison CSV
+- Added noise comparison graph
+- Added graph to the Streamlit dashboard
+
+### Key Result
+
+The project now compares ideal BB84 circuit behavior with noisy circuit behavior. This connects the earlier protocol-level noise model to circuit-level quantum simulation.
 
 ### Output Files
 
-- README.md
-- docs/project_report.md
+- src/qiskit_noise.py
+- notebooks/10_qiskit_noise_models.ipynb
+- results/qiskit_noise_results.csv
+- figures/qiskit_noise_comparison.png
 
-## Notes
+### Next Step
 
-This project is a simulation and research-style learning project. It is designed to explain and explore BB84-style quantum-safe communication concepts through code, experiments, and visualization.
+The next version may run selected BB84 circuits on IBM Quantum hardware and compare ideal simulator, noisy simulator, and real hardware results.

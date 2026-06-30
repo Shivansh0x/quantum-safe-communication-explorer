@@ -313,6 +313,21 @@ else:
     )
 
 st.markdown("---")
+st.subheader("Qiskit Aer Noise Model Result")
+
+qiskit_noise_figure_path = PROJECT_ROOT / "figures" / "qiskit_noise_comparison.png"
+
+if qiskit_noise_figure_path.exists():
+    st.image(
+        str(qiskit_noise_figure_path),
+        caption="Comparison of ideal and noisy BB84 circuit simulations using Qiskit Aer."
+    )
+else:
+    st.warning(
+        "Qiskit noise comparison graph not found. Run the v1.4 Qiskit noise notebook to generate the graph."
+    )
+
+st.markdown("---")
 st.subheader("Security Note")
 
 with st.expander("Technical assumptions"):
