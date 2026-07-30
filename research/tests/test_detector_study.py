@@ -36,6 +36,16 @@ class ThresholdTests(unittest.TestCase):
         self.assertLess(low, 0.10)
         self.assertGreater(high, 0.10)
 
+    def test_wilson_interval_has_exact_zero_success_endpoint(self):
+        low, high = wilson_interval(0, 200)
+        self.assertEqual(low, 0.0)
+        self.assertGreater(high, 0.0)
+
+    def test_wilson_interval_has_exact_all_success_endpoint(self):
+        low, high = wilson_interval(200, 200)
+        self.assertLess(low, 1.0)
+        self.assertEqual(high, 1.0)
+
 
 class StudyTests(unittest.TestCase):
     def test_small_study_grid(self):
@@ -69,4 +79,3 @@ class StudyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

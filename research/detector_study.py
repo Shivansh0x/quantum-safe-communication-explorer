@@ -36,7 +36,7 @@ from scipy.stats import binom
 from research.model_validation import expected_qber_exact
 
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.0.1"
 
 
 @dataclass(frozen=True)
@@ -126,7 +126,17 @@ def wilson_interval(successes: int, trials: int, z: float = 1.959963984540054) -
         )
         / denominator
     )
-    return max(0.0, center - half_width), min(1.0, center + half_width)
+    lower = max(0.0, center - half_width)
+    upper = min(1.0, center + half_width)
+
+    # At the two boundaries the Wilson endpoints are exactly 0 and 1.
+    # Set them explicitly to avoid tiny floating-point residuals.
+    if successes == 0:
+        lower = 0.0
+    if successes == trials:
+        upper = 1.0
+
+    return lower, upper
 
 
 def run_detector_study(config: DetectorStudyConfig) -> pd.DataFrame:
