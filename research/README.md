@@ -70,7 +70,7 @@ $$
 For the raw, unclipped estimator, baseline mismatch produces analytical bias
 
 $$
-\operatorname{Bias}(\widehat p) =
+\mathrm{Bias}(\widehat p) =
 \frac{
 \delta\left(1-\frac{p}{2}\right)
 }{
@@ -89,7 +89,7 @@ of a deployed QKD system.
 Under the detector's assumed no-attack model,
 
 $$
-X\sim\operatorname{Binomial}(K,b_a).
+X\sim\mathrm{Binomial}(K,b_a).
 $$
 
 The critical count is the smallest integer $c$ satisfying
@@ -115,7 +115,7 @@ Under the model assumptions, this gives the conditional guarantee
 $$
 b_t\le b_a+u
 \quad\Longrightarrow\quad
-\operatorname{FPR}(b_t;K,u)\le\alpha.
+\mathrm{FPR}(b_t;K,u)\le\alpha.
 $$
 
 A larger uncertainty margin reduces false alarms over a wider baseline range,

@@ -10,6 +10,12 @@ Try the interactive dashboard here:
 
 [Launch Quantum-Safe Communication Explorer](https://quantum-safe-communication-explorer.streamlit.app/)
 
+## Research Extension
+
+This repository also contains a reproducible statistical study of how baseline-QBER miscalibration affects attack detection in a simplified BB84 model. The study includes fixed-baseline and uncertainty-aware detectors, estimator-bias analysis, simulation results, figures, and automated tests.
+
+See the [research documentation](research/README.md) for the model, experiments, results, limitations, and reproduction instructions.
+
 ## Main Features
 
 ### Protocol Simulation
@@ -147,17 +153,18 @@ quantum-safe-communication-explorer/
 │   ├── 03_qber_experiments.ipynb
 │   ├── 04_message_encryption.ipynb
 │   ├── 05_qiskit_bb84_demo.ipynb
-│   ├── 06_error_correction_demo.ipynb
-│   ├── 07_privacy_amplification_demo.ipynb
-│   ├── 08_channel_noise_demo.ipynb
+│   ├── 06_error_correction.ipynb
+│   ├── 07_privacy_amplification.ipynb
+│   ├── 08_channel_noise.ipynb
 │   ├── 09_eve_noise_comparison.ipynb
 │   ├── 10_qiskit_noise_models.ipynb
-│   ├── 11_ibm_hardware_demo.ipynb
+│   ├── 11_ibm_hardware.ipynb
 │   ├── 12_error_correction_parameter_sweep.ipynb
 │   └── 13_privacy_amplification_parameter_sweep.ipynb
 │
 ├── figures/
 ├── results/
+├── research/
 └── docs/
     ├── final_results_summary.md
     └── project_report.md
