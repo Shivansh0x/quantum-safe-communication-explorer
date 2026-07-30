@@ -32,7 +32,7 @@ from research.detector_study import (
 from research.model_validation import expected_qber_exact
 
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.0.1"
 
 
 @dataclass(frozen=True)
@@ -364,4 +364,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
