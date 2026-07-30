@@ -1,0 +1,27 @@
+{
+  "script_version": "1.0.0",
+  "generated_at_utc": "2026-07-16T16:14:11.097468+00:00",
+  "config": {
+    "assumed_baseline": 0.03,
+    "actual_baselines": [
+      0.01,
+      0.03,
+      0.05
+    ],
+    "eve_interceptions": [
+      0.0,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "sifted_lengths": [
+      250,
+      1000,
+      5000
+    ],
+    "alpha": 0.01,
+    "trials_per_condition": 200,
+    "master_seed": 2028
+  },
+  "purpose": "Cross-validation of exact-binomial predictions using the original bit-level BB84 simulator and exactly K sifted bits."
+}

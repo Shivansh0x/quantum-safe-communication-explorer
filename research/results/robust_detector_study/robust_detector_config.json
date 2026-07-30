@@ -1,0 +1,42 @@
+{
+  "script_version": "1.0.0",
+  "generated_at_utc": "2026-07-16T16:03:30.917869+00:00",
+  "config": {
+    "assumed_baseline": 0.03,
+    "uncertainty_margins": [
+      0.0,
+      0.005,
+      0.01,
+      0.02
+    ],
+    "actual_baselines": [
+      0.01,
+      0.015,
+      0.02,
+      0.025,
+      0.03,
+      0.035,
+      0.04,
+      0.045,
+      0.05
+    ],
+    "eve_interceptions": [
+      0.0,
+      0.02,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "sifted_lengths": [
+      250,
+      500,
+      1000,
+      2500,
+      5000
+    ],
+    "alpha": 0.01,
+    "trials_per_condition": 20000,
+    "master_seed": 2027
+  },
+  "method": "Threshold is calibrated at assumed_baseline + uncertainty_margin. For no-Eve baselines not exceeding that upper bound, monotonicity of the binomial upper tail gives theoretical FPR <= alpha."
+}
