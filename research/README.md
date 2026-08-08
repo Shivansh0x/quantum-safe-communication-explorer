@@ -123,7 +123,7 @@ but it also reduces sensitivity to weak attacks.
 
 ## Experiments
 
-The directory contains four experiments.
+The directory contains five experiments.
 
 ### 1. Expected-QBER model validation
 
@@ -193,10 +193,49 @@ bit-level BB84 simulator.
 Each trial collects exactly $K$ sifted bits before calculating QBER and applying
 the detector threshold.
 
+### 5. Data-driven uncertainty margin
+
+Module:
+
+```text
+research/calibration_budget_study.py
+```
+
+The fixed uncertainty margin `u` in experiment 3 is chosen by hand, which
+relocates rather than solves the calibration problem. This experiment derives
+the margin from a no-attack calibration period of `N_cal` sifted bits using a
+one-sided Clopper-Pearson upper confidence bound at level `1 - beta`:
+
+$$
+b_U = \mathrm{CP}_\beta(X_{\mathrm{cal}}, N_{\mathrm{cal}}).
+$$
+
+Because Clopper-Pearson covers `b_t` with probability at least `1 - beta`, and
+because the binomial upper tail is nondecreasing in its success probability,
+the unconditional no-attack alarm probability of the resulting detector is at
+most `alpha + beta`, provided the channel is stationary between the two blocks.
+
+The grid contains:
+
+- six calibration budgets from 1,000 to 100,000 sifted bits;
+- two calibration levels, `beta = 0.01` and `beta = 0.001`;
+- four interception densities; and
+- 40,000 trials per condition, for 48 conditions and 1.92 million trials.
+
+It measures the realised margin, the false-alarm probability, and detection
+power as a function of the calibration budget, against an oracle detector that
+knows `b_t` exactly.
+
+Processed data are written to `research/results/calibration_budget_study/` and
+plots to `research/figures/calibration_budget_study/`, following the same
+layout as the other research modules.
+
+
 ## Directory structure
 
 ```text
 research/
+├── calibration_budget_study.py
 ├── detector_study.py
 ├── full_bb84_validation.py
 ├── model_validation.py
@@ -208,9 +247,11 @@ research/
 │   ├── model_validation/
 │   ├── detector_study/
 │   ├── robust_detector_study/
-│   └── full_bb84_validation/
+│   ├── full_bb84_validation/
+│   └── calibration_budget_study/
 └── figures/
     ├── detector_study/
+    ├── calibration_budget_study/
     ├── robust_detector_study/
     └── full_bb84_validation/
 ```
@@ -243,7 +284,7 @@ Run the complete research test suite from the repository root:
 python -m unittest discover -s research/tests -v
 ```
 
-The current suite contains 13 tests covering:
+The current suite contains 30 tests covering:
 
 - analytical boundary cases;
 - invalid parameters;
@@ -252,8 +293,11 @@ The current suite contains 13 tests covering:
 - Wilson intervals;
 - experiment grid sizes;
 - deterministic seed uniqueness;
-- monotonicity of uncertainty-aware thresholds; and
-- false-positive control within the declared uncertainty bound.
+- monotonicity of uncertainty-aware thresholds;
+- false-positive control within the declared uncertainty bound;
+- Clopper-Pearson upper-bound behavior;
+- the conditional false-positive guarantee at every baseline within bound; and
+- expected-QBER boundary cases.
 
 ## Reproducing the experiments
 
@@ -264,6 +308,7 @@ python -m research.model_validation
 python -m research.detector_study
 python -m research.robust_detector_study
 python -m research.full_bb84_validation
+python -m research.calibration_budget_study
 ```
 
 The commands write processed data to `research/results/` and plots to
@@ -277,6 +322,7 @@ The main-study master seeds are:
 | Fixed-baseline detector study | 2026 |
 | Uncertainty-aware detector study | 2027 |
 | Protocol-level BB84 cross-validation | 2028 |
+| Data-driven uncertainty margin | 2029 |
 
 Configuration JSON files preserve the grids, seeds, script versions, and
 relevant software information used for the saved results.
@@ -302,8 +348,15 @@ The saved experiments support the following findings:
    ranges satisfied the theoretical 1% false-positive bound.
 
 5. The protocol-level simulator closely reproduced the analytical expected-QBER
-   predictions. Thirty-five of 36 empirical alarm probabilities fell within
-   their corresponding 95% Wilson intervals.
+   predictions. All 36 exact alarm probabilities fell within
+   their corresponding empirical 95% Wilson intervals.
+
+6. Deriving the uncertainty margin from a calibration period makes the
+   calibration budget an explicit design parameter. At K = 1000 and
+   alpha = beta = 0.01, raising the budget from 1,000 to 25,000 sifted bits
+   lifts detection power against a 10% interception attack from roughly 23% to
+   82%, against an oracle ceiling of 92.3%, while every no-attack alarm rate
+   stays well below the alpha + beta bound.
 
 ## Interpretation
 
@@ -333,6 +386,7 @@ The model assumes:
 - no multiphoton pulses;
 - no detector or source side channels;
 - no adaptive attacker;
+- a stationary baseline between the calibration and operating blocks;
 - no error correction or privacy amplification in the detector analysis; and
 - no finite-key secret-rate calculation.
 
