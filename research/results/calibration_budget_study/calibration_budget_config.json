@@ -1,0 +1,40 @@
+{
+  "script_version": "1.0.0",
+  "master_seed": 2029,
+  "alpha": 0.01,
+  "sifted_length": 1000,
+  "actual_baseline": 0.03,
+  "calibration_budgets": [
+    1000,
+    2500,
+    5000,
+    10000,
+    25000,
+    100000
+  ],
+  "calibration_levels": [
+    0.01,
+    0.001
+  ],
+  "interception_densities": [
+    0.0,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "trials": 40000,
+  "conditions": 48,
+  "oracle_reference": {
+    "critical_count": 44,
+    "alarm_p0": 0.008762210711940934,
+    "alarm_p5": 0.3825103625922757,
+    "alarm_p10": 0.9234200622483183,
+    "alarm_p20": 0.9999908616942667
+  },
+  "generated_utc": "2026-08-08T22:58:10.233191+00:00",
+  "python": "3.12.3",
+  "platform": "Linux-6.18.5-fc-v20-x86_64-with-glibc2.39",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2",
+  "scipy": "1.17.1"
+}
