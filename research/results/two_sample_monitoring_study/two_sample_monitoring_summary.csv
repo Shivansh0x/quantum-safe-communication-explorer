@@ -1,0 +1,13 @@
+script_version,scenario_id,scenario,interpretation,qber_start,qber_end,calibration_baseline,calibration_bits,sifted_length,operating_blocks,familywise_alpha,method,run_alert_probability,per_block_alpha,calibration_beta,familywise_upper_bound,representative_critical_count
+1.0.0,stationary,"Stationary channel, no change",No change from the calibration distribution,0.03,0.03,0.03,5000,1000,20,0.01,Known-baseline oracle,0.008381777224649722,0.0005,0.0,0.01,50
+1.0.0,stationary,"Stationary channel, no change",No change from the calibration distribution,0.03,0.03,0.03,5000,1000,20,0.01,Clopper-Pearson margin,0.0001361344121383631,0.00025,0.005,0.01,60
+1.0.0,stationary,"Stationary channel, no change",No change from the calibration distribution,0.03,0.03,0.03,5000,1000,20,0.01,Exact two-sample monitor,0.007137078112869697,0.0005,0.0,0.01,53
+1.0.0,gradual_benign_drift,Gradual benign drift,Benign QBER drift from 3.00% to the matched 5.35% endpoint,0.03,0.0535,0.03,5000,1000,20,0.01,Known-baseline oracle,0.9977482927886971,0.0005,0.0,0.01,50
+1.0.0,gradual_benign_drift,Gradual benign drift,Benign QBER drift from 3.00% to the matched 5.35% endpoint,0.03,0.0535,0.03,5000,1000,20,0.01,Clopper-Pearson margin,0.5278089412747942,0.00025,0.005,0.01,60
+1.0.0,gradual_benign_drift,Gradual benign drift,Benign QBER drift from 3.00% to the matched 5.35% endpoint,0.03,0.0535,0.03,5000,1000,20,0.01,Exact two-sample monitor,0.9300709924529017,0.0005,0.0,0.01,53
+1.0.0,matched_benign_step,Matched benign step,No attack; channel QBER changes from 3.00% to 5.35%,0.0535,0.0535,0.03,5000,1000,20,0.01,Known-baseline oracle,0.9999999999797479,0.0005,0.0,0.01,50
+1.0.0,matched_benign_step,Matched benign step,No attack; channel QBER changes from 3.00% to 5.35%,0.0535,0.0535,0.03,5000,1000,20,0.01,Clopper-Pearson margin,0.9332713733072858,0.00025,0.005,0.01,60
+1.0.0,matched_benign_step,Matched benign step,No attack; channel QBER changes from 3.00% to 5.35%,0.0535,0.0535,0.03,5000,1000,20,0.01,Exact two-sample monitor,0.9992758011531704,0.0005,0.0,0.01,53
+1.0.0,intercept_resend,10% intercept-resend benchmark,3.00% baseline plus 10% partial intercept-resend; QBER is 5.35%,0.0535,0.0535,0.03,5000,1000,20,0.01,Known-baseline oracle,0.9999999999797479,0.0005,0.0,0.01,50
+1.0.0,intercept_resend,10% intercept-resend benchmark,3.00% baseline plus 10% partial intercept-resend; QBER is 5.35%,0.0535,0.0535,0.03,5000,1000,20,0.01,Clopper-Pearson margin,0.9332713733072858,0.00025,0.005,0.01,60
+1.0.0,intercept_resend,10% intercept-resend benchmark,3.00% baseline plus 10% partial intercept-resend; QBER is 5.35%,0.0535,0.0535,0.03,5000,1000,20,0.01,Exact two-sample monitor,0.9992758011531704,0.0005,0.0,0.01,53
