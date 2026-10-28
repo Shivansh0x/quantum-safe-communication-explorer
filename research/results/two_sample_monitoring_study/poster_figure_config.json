@@ -1,0 +1,21 @@
+{
+  "figure_script_version": "1.0.0",
+  "study_script_version": "1.0.0",
+  "calibration_bits": 5000,
+  "sifted_length": 1000,
+  "operating_blocks": 20,
+  "baseline_qber": 0.03,
+  "interception_density": 0.1,
+  "familywise_alpha": 0.01,
+  "per_block_alpha": 0.0005,
+  "calibration_tail_mass": 1e-12,
+  "retained_calibration_mass": 0.9999999999992575,
+  "calculation": "Average 1-product(binomial CDFs) conditional on the shared calibration count",
+  "verification": "All four final points match the saved study summary within 1e-11; matched paths agree at every block",
+  "study_module_sha256": "7b8747b47bc710cb52722e94336d96f022ea8e8029f84312a52f51410f50ac48",
+  "summary_csv_sha256": "8c3513ca248bd7f3c6820049db44e5f77618b4b1a1896a7a6fe38348ec3b460b",
+  "numpy": "2.5.1",
+  "pandas": "3.0.5",
+  "scipy": "1.18.0",
+  "matplotlib": "3.11.1"
+}
