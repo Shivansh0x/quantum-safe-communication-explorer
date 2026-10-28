@@ -12,17 +12,36 @@ Try the interactive dashboard here:
 
 ## Research Extension
 
-This repository also contains a reproducible statistical study of how
-baseline-QBER miscalibration affects attack detection in a simplified BB84
-model. The study includes fixed-baseline, uncertainty-aware, and
-calibration-derived detectors, estimator-bias analysis, simulation results,
-finite-horizon two-sample monitoring, simulation results, figures, and
-automated tests. Its latest extension shows that QBER-only monitoring can
-detect a distributional change but cannot identify its physical cause when
-benign variation and an attack benchmark induce the same error distribution.
+The `research/` directory contains six reproducible statistical studies of
+QBER monitoring in a simplified BB84 model. The studies examine baseline
+miscalibration, estimator bias, false-alarm control, calibration budgets,
+finite operating horizons, and the limits of attributing a QBER change to a
+particular physical cause.
 
-See the [research documentation](research/README.md) for the model, experiments, results, limitations, and reproduction instructions.
+The latest study compares a known-baseline oracle, a calibration-derived
+Clopper-Pearson rule, and an exact conditional two-sample monitor over 20
+operating blocks. It establishes an identifiability limit: when benign channel
+variation and an intercept-resend benchmark induce the same distribution of
+QBER error counts, no QBER-only monitoring rule can distinguish their physical
+causes.
 
+### Conference recognition
+
+A poster based on the finite-horizon study was accepted to the double-blind
+ACM PQQS 2026 Poster and Demo Track. The accepted poster was not presented and
+was not included in the conference proceedings.
+
+### Research resources
+
+- [Complete research documentation](research/README.md)
+- [Poster table and figure reproduction](research/POSTER_REPRODUCTION.md)
+- [Finite-horizon monitoring implementation](research/two_sample_monitoring_study.py)
+- [Automated research tests](research/tests/)
+- [Saved analytical results](research/results/)
+- [Generated research figures](research/figures/)
+
+The research package includes saved configurations, processed results,
+reproduction instructions, generated figures, and 38 automated tests.
 ## Main Features
 
 ### Protocol Simulation
