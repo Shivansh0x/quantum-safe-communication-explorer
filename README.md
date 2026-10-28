@@ -16,7 +16,10 @@ This repository also contains a reproducible statistical study of how
 baseline-QBER miscalibration affects attack detection in a simplified BB84
 model. The study includes fixed-baseline, uncertainty-aware, and
 calibration-derived detectors, estimator-bias analysis, simulation results,
-figures, and automated tests.
+finite-horizon two-sample monitoring, simulation results, figures, and
+automated tests. Its latest extension shows that QBER-only monitoring can
+detect a distributional change but cannot identify its physical cause when
+benign variation and an attack benchmark induce the same error distribution.
 
 See the [research documentation](research/README.md) for the model, experiments, results, limitations, and reproduction instructions.
 
@@ -126,7 +129,7 @@ After that, the IBM hardware notebook can load the saved account automatically.
 
 ## Project Status
 
-Current version: **v2.1**
+Current development version: **v2.2**
 
 The project currently supports BB84 simulation, Eve attack modeling, QBER experiments, parity-based error correction, privacy amplification, channel noise simulation, Eve-vs-noise comparison experiments, Qiskit circuit demonstrations, Qiskit Aer noise modeling, IBM Quantum hardware experiments, error correction parameter sweeps, privacy amplification parameter sweeps, message encryption, project documentation, and a live deployed dashboard, along with a baseline-QBER mismatch research study.
 
@@ -296,6 +299,8 @@ docs/final_results_summary.md
 * v2.0: Final polished release of the BB84 simulation and analysis platform
 - v2.1: Added the baseline-QBER mismatch research study with a data-driven
   uncertainty margin
+- v2.2: Added finite-horizon exact two-sample monitoring and quantified the
+  QBER-only attribution limit
 
 ## Version 2.0: Complete BB84 Simulation and Analysis Platform
 

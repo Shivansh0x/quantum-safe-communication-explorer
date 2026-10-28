@@ -22,6 +22,8 @@ This study asks:
    miscalibration?
 4. Can an uncertainty-aware threshold control false positives when the baseline
    is only known to lie within a bounded range?
+5. Can a baseline-free two-sample monitor identify whether a QBER change was
+   caused by benign channel variation or by the intercept-resend benchmark?
 
 ## Simplified model
 
@@ -123,7 +125,7 @@ but it also reduces sensitivity to weak attacks.
 
 ## Experiments
 
-The directory contains five experiments.
+The directory contains six experiments.
 
 ### 1. Expected-QBER model validation
 
@@ -230,6 +232,32 @@ Processed data are written to `research/results/calibration_budget_study/` and
 plots to `research/figures/calibration_budget_study/`, following the same
 layout as the other research modules.
 
+### 6. Finite-horizon two-sample monitoring
+
+Module:
+
+```text
+research/two_sample_monitoring_study.py
+```
+
+This experiment treats a QBER alert as evidence of distributional change, not
+as attribution to an eavesdropper. It compares a known-baseline oracle, the
+calibration-derived Clopper-Pearson margin, and a one-sided exact conditional
+two-sample test over 20 operating blocks. Bonferroni allocation controls the
+probability of at least one alert during the complete run at 1%. For the
+Clopper-Pearson method, the 1% budget is split between calibration-bound failure
+and the operating-block tests.
+
+The experiment also constructs two observationally equivalent conditions. A
+benign channel step from 3.00% to 5.35% QBER and a 10% partial intercept-resend
+benchmark at a 3.00% baseline both give independent operating error counts with
+the same binomial distribution. Consequently, every rule that observes only
+those QBER counts has exactly the same alert probability in the two conditions.
+
+This is an identifiability limit rather than a detector failure: QBER-only
+monitoring can flag a change, but it cannot identify the physical cause of a
+change that produces the same error-count distribution.
+
 
 ## Directory structure
 
@@ -240,6 +268,7 @@ research/
 ├── full_bb84_validation.py
 ├── model_validation.py
 ├── robust_detector_study.py
+├── two_sample_monitoring_study.py
 ├── requirements.txt
 ├── README.md
 ├── tests/
@@ -248,12 +277,14 @@ research/
 │   ├── detector_study/
 │   ├── robust_detector_study/
 │   ├── full_bb84_validation/
-│   └── calibration_budget_study/
+│   ├── calibration_budget_study/
+│   └── two_sample_monitoring_study/
 └── figures/
     ├── detector_study/
     ├── calibration_budget_study/
     ├── robust_detector_study/
-    └── full_bb84_validation/
+    ├── full_bb84_validation/
+    └── two_sample_monitoring_study/
 ```
 
 Smoke-test outputs and private paper-development files are intentionally
@@ -284,7 +315,7 @@ Run the complete research test suite from the repository root:
 python -m unittest discover -s research/tests -v
 ```
 
-The current suite contains 30 tests covering:
+The current suite contains 38 tests covering:
 
 - analytical boundary cases;
 - invalid parameters;
@@ -297,7 +328,10 @@ The current suite contains 30 tests covering:
 - false-positive control within the declared uncertainty bound;
 - Clopper-Pearson upper-bound behavior;
 - the conditional false-positive guarantee at every baseline within bound; and
-- expected-QBER boundary cases.
+- expected-QBER boundary cases;
+- exact conditional two-sample p-values and critical counts;
+- finite-horizon family-wise error allocation; and
+- observational equivalence of matched benign and attack-induced QBER.
 
 ## Reproducing the experiments
 
@@ -309,6 +343,7 @@ python -m research.detector_study
 python -m research.robust_detector_study
 python -m research.full_bb84_validation
 python -m research.calibration_budget_study
+python -m research.two_sample_monitoring_study
 ```
 
 The commands write processed data to `research/results/` and plots to
@@ -323,6 +358,7 @@ The main-study master seeds are:
 | Uncertainty-aware detector study | 2027 |
 | Protocol-level BB84 cross-validation | 2028 |
 | Data-driven uncertainty margin | 2029 |
+| Finite-horizon two-sample monitoring | Analytical; no random seed |
 
 Configuration JSON files preserve the grids, seeds, script versions, and
 relevant software information used for the saved results.
@@ -358,6 +394,13 @@ The saved experiments support the following findings:
    82%, against an oracle ceiling of 92.3%, while every no-attack alarm rate
    stays well below the alpha + beta bound.
 
+7. Over 20 operating blocks with a 1% run-level error budget, the exact
+   two-sample monitor alerts with probability 0.714% under a stationary 3%
+   baseline and 99.928% after a step to 5.35% QBER. The latter probability is
+   exactly the same whether the 5.35% QBER comes from a benign channel change
+   or from the study's 10% intercept-resend benchmark. Under the i.i.d.
+   error-count model, QBER alone cannot distinguish those causes.
+
 ## Interpretation
 
 Increasing $K$ improves statistical precision, but it does not determine
@@ -369,6 +412,12 @@ The uncertainty-aware detector addresses bounded upward baseline variation by
 calibrating at an upper baseline. This produces a transparent false-positive
 guarantee within the covered range, but it requires a higher threshold and
 therefore reduces detection power against weak attacks.
+
+The exact two-sample monitor removes the need to supply a numerical baseline
+for each comparison and extends the error guarantee from one operating block
+to a declared finite run. It detects departures from the calibration
+distribution. It does not determine whether a departure was caused by an
+attacker, channel drift, hardware variation, or another mechanism.
 
 ## Limitations
 
@@ -390,8 +439,11 @@ The model assumes:
 - no error correction or privacy amplification in the detector analysis; and
 - no finite-key secret-rate calculation.
 
-A QBER alarm identifies inconsistency with an assumed baseline model. It does
-not uniquely prove that Eve caused the observed errors.
+A QBER alert identifies inconsistency with a reference distribution. It does
+not uniquely prove that Eve caused the observed errors, and it does not replace
+parameter estimation in a composable QKD security analysis. The two-sample
+monitor has been evaluated analytically under the stated Bernoulli model, not
+validated on telemetry from a deployed QKD link.
 
 ## Relationship to the main project
 
