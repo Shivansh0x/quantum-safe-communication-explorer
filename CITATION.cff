@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software or its research materials, please cite it using the metadata below."
+title: "Quantum-Safe Communication Explorer: BB84 Simulation and QBER Monitoring Research"
+type: software
+authors:
+  - family-names: "Agrawal"
+    given-names: "Shivansh"
+version: "2.2"
+date-released: 2026-10-28
+repository-code: "https://github.com/Shivansh0x/quantum-safe-communication-explorer"
+url: "https://quantum-safe-communication-explorer.streamlit.app/"
+license: MIT
+keywords:
+  - BB84
+  - quantum key distribution
+  - QBER
+  - statistical monitoring
+  - quantum cryptography
+  - Qiskit
