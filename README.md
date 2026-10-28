@@ -42,6 +42,7 @@ was not included in the conference proceedings.
 
 The research package includes saved configurations, processed results,
 reproduction instructions, generated figures, and 38 automated tests.
+
 ## Main Features
 
 ### Protocol Simulation

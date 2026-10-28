@@ -1,6 +1,6 @@
 # Reproduce the poster table and figure
 
-Run these commands from the artifact root:
+Run these commands from the repository root:
 
 ```bash
 python -m pip install -r research/requirements-poster.txt
